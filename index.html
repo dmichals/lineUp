@@ -361,7 +361,7 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
     </div>
     <p class="donate-note">Payments handled securely via PayPal. No account required.</p>
     <br>
-    <a href="https://www.paypal.com/donate" id="donateBtn" class="btn-primary" target="_blank" style="margin-top:8px">Donate $10 via PayPal</a>
+    <a href="https://www.paypal.me/dmichals/10" id="donateBtn" class="btn-primary" target="_blank" style="margin-top:8px">Donate $10 via PayPal</a>
   </div>
   <div class="donate-card">
     <div class="section-label" style="margin-bottom:12px">Stay in the loop</div>
@@ -416,6 +416,7 @@ function setAmount(amt, el) {
   document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('donateBtn').textContent = 'Donate $' + amt + ' via PayPal';
+  document.getElementById('donateBtn').href = 'https://www.paypal.me/dmichals/' + amt;
 }
 
 function submitEmail() {
