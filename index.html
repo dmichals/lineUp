@@ -361,7 +361,7 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
     </div>
     <p class="donate-note">Payments handled securely via PayPal. No account required.</p>
     <br>
-    <a href="https://www.paypal.me/dmichals/10" id="donateBtn" class="btn-primary" target="_blank" style="margin-top:8px">Donate $10 via PayPal</a>
+    <a href="https://www.paypal.com/donate" id="donateBtn" class="btn-primary" target="_blank" style="margin-top:8px">Donate $10 via PayPal</a>
   </div>
   <div class="donate-card">
     <div class="section-label" style="margin-bottom:12px">Stay in the loop</div>
@@ -416,18 +416,44 @@ function setAmount(amt, el) {
   document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('donateBtn').textContent = 'Donate $' + amt + ' via PayPal';
-  document.getElementById('donateBtn').href = 'https://www.paypal.me/dmichals/' + amt;
 }
 
-// Email signup (localStorage for demo — replace with your backend)
 function submitEmail() {
-  const name = document.getElementById('emailName').value.trim();
+  const name  = document.getElementById('emailName').value.trim();
   const email = document.getElementById('emailAddr').value.trim();
   if (!email || !email.includes('@')) { alert('Please enter a valid email'); return; }
-  // In production: POST to your email service (Mailchimp, ConvertKit, etc.)
-  console.log('Signup:', name, email);
-  document.getElementById('emailForm').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'block';
+
+  const btn = document.querySelector('#emailForm button');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  fetch('https://api.buttondown.email/v1/subscribers', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Token 353d5ab0-0ca2-4b57-8ee0-5f98c18f3fff',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email_address: email, metadata: { name: name, source: 'LineUp landing page' } })
+  })
+  .then(res => {
+    if (res.ok || res.status === 201) {
+      document.getElementById('emailForm').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else if (res.status === 400) {
+      btn.textContent = 'Notify Me';
+      btn.disabled = false;
+      alert('That email is already signed up!');
+    } else {
+      btn.textContent = 'Notify Me';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.textContent = 'Notify Me';
+    btn.disabled = false;
+    alert('Connection error. Please try again.');
+  });
 }
 </script>
 </body>
