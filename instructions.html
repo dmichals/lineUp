@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LineUp — How to Use</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean:#0a1628; --deep:#061020; --water:#0d2444; --sky:#2d7fc1;
+  --foam:#e8f4fd; --white:#fff; --gold:#f5c842; --coral:#ff6b4a;
+  --go:#3ddc84; --muted:#6a8faf; --border:rgba(45,127,193,0.2);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ocean);color:var(--foam);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.7;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:18px 48px;background:rgba(6,16,32,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--white);text-decoration:none;}
+.nav-logo span{color:var(--sky);}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;transition:color 0.2s;}
+.nav-links a:hover{color:var(--foam);}
+.nav-cta{background:var(--sky);color:var(--white)!important;padding:9px 22px;border-radius:4px;font-weight:500!important;}
+
+.page{max-width:800px;margin:0 auto;padding:120px 48px 80px;}
+.page-label{font-size:11px;font-weight:500;letter-spacing:4px;color:var(--sky);text-transform:uppercase;margin-bottom:12px;}
+.page-title{font-family:'DM Serif Display',serif;font-size:clamp(40px,6vw,64px);line-height:1.05;color:var(--white);margin-bottom:48px;}
+.page-title em{font-style:italic;color:var(--sky);}
+
+.toc{background:var(--water);border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:64px;}
+.toc-title{font-size:12px;font-weight:500;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;}
+.toc a{display:block;color:var(--muted);text-decoration:none;font-size:15px;padding:4px 0;transition:color 0.2s;}
+.toc a:hover{color:var(--sky);}
+.toc a::before{content:counter(toc-item)'. ';counter-increment:toc-item;color:var(--sky);}
+.toc{counter-reset:toc-item;}
+
+.section{margin-bottom:64px;}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(45,127,193,0.15);line-height:1;margin-bottom:4px;}
+.section-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--white);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.section-title em{font-style:italic;color:var(--sky);}
+p{font-size:16px;color:var(--muted);margin-bottom:16px;}
+p strong{color:var(--foam);font-weight:500;}
+
+.steps-list{list-style:none;counter-reset:steps;}
+.steps-list li{counter-increment:steps;display:flex;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(45,127,193,0.08);}
+.steps-list li:last-child{border-bottom:none;}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:rgba(45,127,193,0.3);line-height:1;flex-shrink:0;width:40px;}
+.step-body{}
+.step-title{font-size:16px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.6;}
+
+.btn-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.btn-table th{background:var(--water);padding:10px 14px;text-align:left;font-size:12px;font-weight:500;letter-spacing:1px;color:var(--foam);text-transform:uppercase;border-bottom:1px solid var(--border);}
+.btn-table td{padding:12px 14px;font-size:14px;color:var(--muted);border-bottom:1px solid rgba(45,127,193,0.06);}
+.btn-table td:first-child{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:var(--foam);}
+.btn-table tr:hover td{background:rgba(13,36,68,0.4);}
+
+.beep-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.beep-table th{background:var(--water);padding:10px 14px;text-align:left;font-size:12px;font-weight:500;letter-spacing:1px;color:var(--foam);text-transform:uppercase;border-bottom:1px solid var(--border);}
+.beep-table td{padding:11px 14px;font-size:14px;color:var(--muted);border-bottom:1px solid rgba(45,127,193,0.06);}
+.beep-table td:first-child{font-weight:500;color:var(--foam);}
+
+.callout{background:rgba(45,127,193,0.07);border:1px solid rgba(45,127,193,0.25);border-left:3px solid var(--sky);border-radius:4px;padding:16px 20px;margin-bottom:20px;}
+.callout p{color:var(--foam);margin:0;font-size:15px;}
+.callout.warn{background:rgba(245,200,66,0.06);border-color:rgba(245,200,66,0.25);border-left-color:var(--gold);}
+.callout.warn p{color:var(--gold);}
+.callout.go{background:rgba(61,220,132,0.06);border-color:rgba(61,220,132,0.25);border-left-color:var(--go);}
+.callout.go p{color:var(--go);}
+
+.display-diagram{background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:20px;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.display-diagram .hl{color:var(--sky);}
+.display-diagram .go{color:var(--go);}
+.display-diagram .warn{color:var(--gold);}
+
+.faq-item{border-bottom:1px solid var(--border);padding:20px 0;}
+.faq-q{font-size:16px;font-weight:500;color:var(--white);margin-bottom:8px;cursor:pointer;}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7;}
+
+.back-btn{display:inline-block;margin-top:48px;color:var(--muted);text-decoration:none;font-size:14px;border:1px solid var(--border);padding:10px 20px;border-radius:4px;transition:all 0.2s;}
+.back-btn:hover{border-color:var(--sky);color:var(--sky);}
+
+footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:var(--muted);}
+.footer-logo span{color:var(--sky);}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color 0.2s;}
+.footer-links a:hover{color:var(--foam);}
+
+@media(max-width:700px){
+  nav{padding:16px 20px;}
+  .nav-links{display:none;}
+  .page{padding:90px 20px 60px;}
+  footer{flex-direction:column;gap:16px;padding:24px 20px;text-align:center;}
+  .footer-links{flex-wrap:wrap;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html"><span>Line</span>Up</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#features">Features</a>
+    <a href="index.html#donate">Support</a>
+    <a href="app.html" class="nav-cta">Launch App</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-label">Documentation</div>
+  <h1 class="page-title">How to use<br><em>LineUp.</em></h1>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#install">Installing on your device</a>
+    <a href="#gps">GPS and permissions</a>
+    <a href="#line">Setting the start line</a>
+    <a href="#timer">Using the timer</a>
+    <a href="#display">Reading the display</a>
+    <a href="#beeps">Beep schedule</a>
+    <a href="#race">Race day procedure</a>
+    <a href="#faq">FAQ</a>
+  </div>
+
+  <!-- 1. INSTALL -->
+  <div class="section" id="install">
+    <div class="section-num">01</div>
+    <div class="section-title">Installing on your <em>device</em></div>
+    <p>LineUp runs in any modern browser — no app store required. For the best experience, add it to your home screen so it opens full-screen like a native app.</p>
+    <ol class="steps-list">
+      <li><div class="step-num">1</div><div class="step-body"><div class="step-title">Open Chrome on your Android phone or tablet</div><div class="step-desc">LineUp works in any browser but Chrome gives the best GPS performance and supports the screen wake lock feature that keeps the display on during a race.</div></div></li>
+      <li><div class="step-num">2</div><div class="step-body"><div class="step-title">Navigate to the LineUp app URL</div><div class="step-desc">Open app.html in your browser. You can bookmark the page or continue to step 3 to add it to your home screen.</div></div></li>
+      <li><div class="step-num">3</div><div class="step-body"><div class="step-title">Add to home screen</div><div class="step-desc">Tap the three-dot menu in Chrome and select "Add to Home Screen". Give it the name LineUp and tap Add. It will appear as an icon on your home screen and open full-screen without the browser address bar.</div></div></li>
+      <li><div class="step-num">4</div><div class="step-body"><div class="step-title">Allow location access</div><div class="step-desc">When the app first opens it will ask permission to access your location. Tap Allow. LineUp uses your device GPS for speed, course, and start line geometry calculations. Location data never leaves your device.</div></div></li>
+    </ol>
+    <div class="callout">
+      <p><strong>iPad / iPhone users:</strong> Open in Safari, tap the Share button, then "Add to Home Screen". Safari is required for GPS access on iOS — Chrome on iPhone does not support the Geolocation API.</p>
+    </div>
+  </div>
+
+  <!-- 2. GPS -->
+  <div class="section" id="gps">
+    <div class="section-num">02</div>
+    <div class="section-title">GPS and <em>permissions</em></div>
+    <p>LineUp uses your device's built-in GPS to calculate speed over ground (SOG), course over ground (COG), and all start line distances. The GPS indicator in the top right shows current status.</p>
+    <table class="btn-table">
+      <tr><th>Indicator</th><th>Meaning</th></tr>
+      <tr><td>Searching</td><td>GPS is acquiring satellites. Move outside with a clear view of the sky and wait 30–60 seconds.</td></tr>
+      <tr><td>±15m</td><td>GPS locked with 15 meter accuracy. Good for open water racing.</td></tr>
+      <tr><td>±50m+</td><td>GPS accuracy is reduced — possibly indoors or obstructed sky. Move to open deck.</td></tr>
+      <tr><td>No GPS</td><td>Location permission denied or GPS unavailable. Check browser permissions.</td></tr>
+    </table>
+    <div class="callout warn">
+      <p><strong>Accuracy note:</strong> Consumer GPS is typically accurate to 3–10 meters in clear conditions. Line distances under 20 meters should be treated as approximate. The burn time calculation becomes most reliable when you are more than 0.1nm from the line.</p>
+    </div>
+  </div>
+
+  <!-- 3. LINE -->
+  <div class="section" id="line">
+    <div class="section-num">03</div>
+    <div class="section-title">Setting the <em>start line</em></div>
+    <p>LineUp lets you set the PIN end and RC boat end independently — in either order. You can update either end without losing the other if the race committee shifts position before the start.</p>
+    <ol class="steps-list">
+      <li><div class="step-num">1</div><div class="step-body"><div class="step-title">Sail to the PIN end</div><div class="step-desc">The PIN end is the port-end buoy of the start line. Get as close as safely possible — within a boat length is ideal. Your GPS accuracy indicator will show how precise the fix is.</div></div></li>
+      <li><div class="step-num">2</div><div class="step-body"><div class="step-title">Tap MARK PIN</div><div class="step-desc">The PIN card turns green and shows your distance from it. A confirmation toast confirms the waypoint was saved. One short beep confirms.</div></div></li>
+      <li><div class="step-num">3</div><div class="step-body"><div class="step-title">Sail to the RC BOAT end</div><div class="step-desc">The RC boat end is the committee boat at the starboard end of the line. Position yourself alongside or just off the stern.</div></div></li>
+      <li><div class="step-num">4</div><div class="step-body"><div class="step-title">Tap MARK RC</div><div class="step-desc">The RC card turns green. If both ends are now set, the line becomes active and all distance calculations begin updating in real time.</div></div></li>
+    </ol>
+    <div class="callout go">
+      <p><strong>Tip:</strong> You can set the RC end first then the PIN end — the order doesn't matter. If the RC boat moves its position before the start, just sail back and tap MARK RC again. The PIN waypoint is unaffected.</p>
+    </div>
+    <p>To clear both waypoints before the next race, tap <strong>Clear Line</strong>. Three short beeps confirm both marks are removed.</p>
+  </div>
+
+  <!-- 4. TIMER -->
+  <div class="section" id="timer">
+    <div class="section-num">04</div>
+    <div class="section-title">Using the <em>timer</em></div>
+    <table class="btn-table">
+      <tr><th>Button</th><th>Function</th></tr>
+      <tr><td>Sync</td><td>Starts the countdown from the selected sequence (5 or 3 minutes). Press at the moment of the warning gun from the race committee.</td></tr>
+      <tr><td>Resync ↓</td><td>Snaps the timer DOWN to the next lower whole minute. Use at any subsequent gun if the timer drifted. Can never put you ahead of the gun.</td></tr>
+      <tr><td>5 Min / 3 Min</td><td>Toggles between 5-minute and 3-minute start sequences. Tap before or after the race — resets the timer when changed.</td></tr>
+      <tr><td>Mark PIN</td><td>Records the PIN end waypoint at your current GPS position.</td></tr>
+      <tr><td>Mark RC</td><td>Records the RC boat end waypoint at your current GPS position.</td></tr>
+      <tr><td>Clear Line</td><td>Removes both waypoints. Use between races if the line is reset.</td></tr>
+    </table>
+    <div class="callout">
+      <p><strong>RESYNC explained:</strong> If the timer reads 2:47 and you tap RESYNC, it snaps to 2:00 — not 3:00. It always goes to the next lower minute so you can never be accidentally over early on the line.</p>
+    </div>
+  </div>
+
+  <!-- 5. DISPLAY -->
+  <div class="section" id="display">
+    <div class="section-num">05</div>
+    <div class="section-title">Reading the <em>display</em></div>
+    <div class="display-diagram">
+<span class="hl">LineUp</span>                          <span class="hl">±8m  5 MIN</span>
+
+      <span class="warn">1:42</span>
+
+  <span class="hl">BURN</span>     SOG      COG      ACC
+  <span class="go">0:24</span>     6.1kt    053°     8m
+
+▸ Near line
+  PIN       RC        Line      Fav
+  0.14nm    0.29nm    0.042nm   <span class="go">PIN</span>
+
+  [PIN END ●  0.14nm]   [RC BOAT ●  0.29nm]
+
+  [  SYNC  ]  [ RESYNC ↓ ]  [  5 MIN  ]
+  [MARK PIN]  [ MARK RC  ]  [CLR LINE ]
+    </div>
+    <table class="btn-table">
+      <tr><th>Field</th><th>What it means</th></tr>
+      <tr><td>Countdown</td><td>Time remaining to the start gun. Turns amber at 30 seconds, orange at 5 seconds, green at the gun.</td></tr>
+      <tr><td>Burn</td><td>How long to sail away from the line before turning back to hit the gun exactly at full speed. Shows GO! when it is time to head for the line. Always visible.</td></tr>
+      <tr><td>SOG</td><td>Speed over ground in knots from GPS.</td></tr>
+      <tr><td>COG</td><td>Course over ground in degrees from GPS.</td></tr>
+      <tr><td>ACC</td><td>GPS accuracy in meters. Lower is better.</td></tr>
+      <tr><td>PIN / RC</td><td>Straight-line distance from your current position to each end of the start line. Visible inside 2 minutes when both marks are set.</td></tr>
+      <tr><td>Line</td><td>Perpendicular distance from your boat to the start line itself. This is what matters for crossing — it reaches zero when you are on the line.</td></tr>
+      <tr><td>Fav</td><td>Favored end of the line based on current course over ground. PIN (green) or RC (orange).</td></tr>
+    </table>
+  </div>
+
+  <!-- 6. BEEPS -->
+  <div class="section" id="beeps">
+    <div class="section-num">06</div>
+    <div class="section-title">Beep <em>schedule</em></div>
+    <p>LineUp plays audible signals through your device speaker. Make sure your volume is turned up before the start sequence begins.</p>
+    <table class="beep-table">
+      <tr><th>When</th><th>Signal</th><th>Meaning</th></tr>
+      <tr><td>Sync pressed</td><td>1 short beep</td><td>Timer started successfully</td></tr>
+      <tr><td>Every whole minute</td><td>1 short beep</td><td>Minute marker</td></tr>
+      <tr><td>30 seconds</td><td>2 short beeps</td><td>30 second warning</td></tr>
+      <tr><td>10, 9, 8, 7, 6 seconds</td><td>1 short beep per second</td><td>10-second countdown</td></tr>
+      <tr><td>5, 4, 3, 2, 1 seconds</td><td>1 long beep per second</td><td>Final 5 seconds — distinct higher tone</td></tr>
+      <tr><td>0:00 — the gun</td><td>3 long beeps</td><td>Start</td></tr>
+      <tr><td>RESYNC pressed</td><td>2 short beeps</td><td>Timer snapped to lower minute</td></tr>
+      <tr><td>Mark set</td><td>1 short beep</td><td>Waypoint recorded</td></tr>
+    </table>
+    <div class="callout warn">
+      <p><strong>Volume tip:</strong> On Android, media volume controls the beep loudness. In a noisy cockpit environment, turn volume to maximum before the start sequence. A waterproof Bluetooth speaker placed near the helm works well for crew-wide audio.</p>
+    </div>
+  </div>
+
+  <!-- 7. RACE DAY -->
+  <div class="section" id="race">
+    <div class="section-num">07</div>
+    <div class="section-title">Race day <em>procedure</em></div>
+    <ol class="steps-list">
+      <li><div class="step-num">1</div><div class="step-body"><div class="step-title">Open LineUp and wait for GPS lock</div><div class="step-desc">Launch the app while still at the dock or mooring. GPS typically locks within 30–90 seconds on open water. The indicator shows ±Xm when ready.</div></div></li>
+      <li><div class="step-num">2</div><div class="step-body"><div class="step-title">Select your sequence</div><div class="step-desc">Tap the mode pill in the top right to toggle between 5-minute and 3-minute sequences. Most club racing uses 5 minutes.</div></div></li>
+      <li><div class="step-num">3</div><div class="step-body"><div class="step-title">Set the start line</div><div class="step-desc">Sail to the PIN end and tap MARK PIN. Sail to the RC boat and tap MARK RC. Both marks can be set in either order.</div></div></li>
+      <li><div class="step-num">4</div><div class="step-body"><div class="step-title">Sync at the warning gun</div><div class="step-desc">At the 5-minute warning gun, tap SYNC immediately. If you miss the gun, tap RESYNC at the next gun to snap down to the next lower minute.</div></div></li>
+      <li><div class="step-num">5</div><div class="step-body"><div class="step-title">Watch burn time and approach</div><div class="step-desc">Monitor the BURN display. When it reads GO! turn toward the line at full speed. Inside 2 minutes the near-line panel shows PIN, RC, and LINE distances updating in real time.</div></div></li>
+      <li><div class="step-num">6</div><div class="step-body"><div class="step-title">After the race</div><div class="step-desc">Tap Clear Line between races if the RC has moved or for the next start. Marks can also be individually updated without clearing both.</div></div></li>
+    </ol>
+  </div>
+
+  <!-- 8. FAQ -->
+  <div class="section" id="faq">
+    <div class="section-num">08</div>
+    <div class="section-title">Frequently asked <em>questions</em></div>
+    <div class="faq-item"><div class="faq-q">Why does the screen keep dimming?</div><div class="faq-a">LineUp requests a screen wake lock to keep the display on. If your screen still dims, go to Settings → Display → Screen Timeout and set it to a longer interval. Some battery saver modes override wake locks.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I use this without internet connection?</div><div class="faq-a">Yes — once loaded the app works completely offline. GPS does not require internet. If you are in an area with no signal, load the app before leaving the dock.</div></div>
+    <div class="faq-item"><div class="faq-q">Why is my GPS accuracy showing 50m or more?</div><div class="faq-a">Accuracy depends on sky view and device hardware. Ensure you are on open deck with no obstructions above. Accuracy typically improves over 1–2 minutes as more satellites are acquired. Some budget tablets have weaker GPS receivers than phones.</div></div>
+    <div class="faq-item"><div class="faq-q">Is my location data stored or shared?</div><div class="faq-a">No. All GPS data is processed entirely on your device. LineUp does not send any data to a server. Your location never leaves your phone or tablet.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I use this on a keelboat, dinghy, or cat?</div><div class="faq-a">Yes — LineUp works for any sailboat racing with a standard start sequence. The burn time and line geometry calculations are class-agnostic.</div></div>
+    <div class="faq-item"><div class="faq-q">The favored end calculation seems off. Why?</div><div class="faq-a">Favored end is calculated by comparing your current course over ground to the line bearing. This works well when sailing upwind toward the line. In light air or when motor-sailing it may not reflect the true wind angle accurately. A future update will add true wind angle support.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I use this on an iPhone or iPad?</div><div class="faq-a">Yes — open in Safari and add to home screen. Do not use Chrome on iOS as it does not support the Geolocation API. All features including audio and GPS work in Safari on iOS 14.5 and later.</div></div>
+  </div>
+
+  <a href="index.html" class="back-btn">← Back to LineUp home</a>
+</div>
+
+<footer>
+  <div class="footer-logo"><span>Line</span>Up</div>
+  <div class="footer-links">
+    <a href="app.html">Launch App</a>
+    <a href="index.html#donate">Support</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+</body>
+</html>

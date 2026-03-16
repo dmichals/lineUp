@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="LineUp — GPS race start timer for sailors. Free web app. Works on any phone or tablet.">
+<title>LineUp — GPS Race Start Timer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean:   #0a1628;
+  --deep:    #061020;
+  --water:   #0d2444;
+  --horizon: #1a4a7a;
+  --sky:     #2d7fc1;
+  --foam:    #e8f4fd;
+  --white:   #ffffff;
+  --gold:    #f5c842;
+  --coral:   #ff6b4a;
+  --muted:   #6a8faf;
+  --border:  rgba(45,127,193,0.2);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--ocean); color: var(--foam); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+/* ── ANIMATED OCEAN BACKGROUND ── */
+.ocean-bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.wave {
+  position: absolute; bottom: 0; left: -50%; width: 200%; opacity: 0.04;
+  background: radial-gradient(ellipse at 50% 100%, var(--sky) 0%, transparent 70%);
+}
+.wave1 { height: 60vh; animation: waveDrift 18s ease-in-out infinite; }
+.wave2 { height: 45vh; animation: waveDrift 24s ease-in-out infinite reverse; opacity: 0.03; }
+.stars { position: absolute; inset: 0; background-image: radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.6) 0%, transparent 100%), radial-gradient(1px 1px at 60% 8%, rgba(255,255,255,0.4) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 80% 25%, rgba(255,255,255,0.5) 0%, transparent 100%), radial-gradient(1px 1px at 40% 40%, rgba(255,255,255,0.3) 0%, transparent 100%), radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.2) 0%, transparent 100%), radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.3) 0%, transparent 100%); }
+.horizon-glow { position: absolute; bottom: 0; left: 0; right: 0; height: 30vh; background: linear-gradient(to top, rgba(13,36,68,0.8) 0%, transparent 100%); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 48px;
+  background: linear-gradient(to bottom, rgba(6,16,32,0.9) 0%, transparent 100%);
+  backdrop-filter: blur(4px);
+}
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; color: var(--white); text-decoration: none; }
+.nav-logo span { color: var(--sky); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 400; letter-spacing: 0.5px; transition: color 0.2s; }
+.nav-links a:hover { color: var(--foam); }
+.nav-cta { background: var(--sky); color: var(--white) !important; padding: 10px 24px; border-radius: 4px; font-weight: 500 !important; transition: background 0.2s !important; }
+.nav-cta:hover { background: #3a8fd4 !important; color: var(--white) !important; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  padding: 120px 48px 80px;
+  max-width: 1200px; margin: 0 auto;
+}
+.hero-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 4px; color: var(--sky); text-transform: uppercase; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 12vw, 160px); line-height: 0.92; letter-spacing: 2px; color: var(--white); margin-bottom: 8px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+.hero-title-sub { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(20px, 3vw, 36px); color: var(--sky); margin-bottom: 32px; opacity: 0; animation: fadeUp 0.8s 0.5s forwards; }
+.hero-desc { max-width: 520px; font-size: 18px; line-height: 1.7; color: var(--muted); margin-bottom: 48px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+.hero-desc strong { color: var(--foam); font-weight: 500; }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+.btn-primary { background: var(--sky); color: var(--white); text-decoration: none; padding: 16px 36px; border-radius: 4px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; transition: all 0.2s; display: inline-block; }
+.btn-primary:hover { background: #3a8fd4; transform: translateY(-1px); }
+.btn-secondary { color: var(--foam); text-decoration: none; padding: 16px 36px; border: 1px solid var(--border); border-radius: 4px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; transition: all 0.2s; display: inline-block; }
+.btn-secondary:hover { border-color: var(--sky); color: var(--sky); }
+.hero-note { font-size: 13px; color: var(--muted); margin-top: 16px; width: 100%; }
+
+/* ── MOCK SCREEN ── */
+.hero-screen {
+  position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+  width: min(380px, 35vw);
+  background: #0d1b2e; border: 1px solid rgba(45,127,193,0.3); border-radius: 16px;
+  padding: 20px; box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(45,127,193,0.1);
+  opacity: 0; animation: fadeLeft 1s 1s forwards;
+}
+.ms-label { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+.ms-time { font-family: 'Bebas Neue', sans-serif; font-size: 88px; line-height: 0.9; color: var(--gold); letter-spacing: 2px; text-align: center; margin: 8px 0; }
+.ms-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-top: 12px; border-top: 1px solid rgba(45,127,193,0.15); padding-top: 12px; }
+.ms-cell { text-align: center; }
+.ms-cl { font-size: 9px; color: var(--muted); letter-spacing: 1px; font-family: 'DM Sans', sans-serif; }
+.ms-cv { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--foam); line-height: 1.1; }
+.ms-cv.go { color: var(--coral); }
+.ms-near { background: rgba(45,127,193,0.1); border: 1px solid rgba(45,127,193,0.3); border-radius: 6px; padding: 8px; margin-top: 10px; display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; }
+.ms-dots { display: flex; gap: 6px; justify-content: center; margin-top: 10px; }
+.ms-dot { width: 8px; height: 8px; border-radius: 50%; }
+.ms-dot.f { background: var(--sky); box-shadow: 0 0 4px var(--sky); }
+.ms-dot.e { border: 1.5px solid var(--muted); }
+.ms-tag { font-family: 'DM Sans', sans-serif; font-size: 10px; color: var(--sky); text-align: center; margin-top: 6px; letter-spacing: 1px; }
+
+/* ── SECTION BASE ── */
+section { position: relative; z-index: 1; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+/* ── FEATURES ── */
+.features { padding: 120px 0; }
+.section-label { font-size: 11px; font-weight: 500; letter-spacing: 4px; color: var(--sky); text-transform: uppercase; margin-bottom: 16px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 56px); line-height: 1.1; color: var(--white); margin-bottom: 64px; }
+.section-title em { font-style: italic; color: var(--sky); }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.feat { background: var(--water); padding: 40px 32px; transition: background 0.3s; }
+.feat:hover { background: #102040; }
+.feat-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: rgba(45,127,193,0.2); line-height: 1; margin-bottom: 16px; }
+.feat-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--white); margin-bottom: 12px; }
+.feat-desc { font-size: 15px; line-height: 1.7; color: var(--muted); }
+
+/* ── HOW IT WORKS ── */
+.how { padding: 120px 0; background: var(--deep); }
+.steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 32px; margin-top: 64px; }
+.step { position: relative; }
+.step::after { content: '→'; position: absolute; right: -20px; top: 16px; color: var(--border); font-size: 20px; }
+.step:last-child::after { display: none; }
+.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 64px; color: rgba(45,127,193,0.15); line-height: 1; }
+.step-title { font-size: 16px; font-weight: 500; color: var(--white); margin-bottom: 8px; }
+.step-desc { font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+/* ── COMPARISON ── */
+.compare { padding: 120px 0; }
+.compare-table { margin-top: 64px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.ct-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; background: var(--water); }
+.ct-row    { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; border-top: 1px solid var(--border); }
+.ct-row:hover { background: rgba(13,36,68,0.5); }
+.ct-cell { padding: 16px 20px; font-size: 14px; color: var(--muted); }
+.ct-header .ct-cell { font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--foam); }
+.ct-header .ct-cell.hl { color: var(--sky); }
+.ct-cell.feature { color: var(--foam); }
+.ct-cell.yes { color: var(--sky); font-size: 18px; }
+.ct-cell.no  { color: rgba(106,143,175,0.3); font-size: 18px; }
+.ct-cell.hl  { background: rgba(45,127,193,0.05); }
+
+/* ── DONATE ── */
+.donate { padding: 120px 0; background: var(--deep); }
+.donate-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.donate-title { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 4vw, 52px); line-height: 1.1; color: var(--white); margin-bottom: 20px; }
+.donate-title em { font-style: italic; color: var(--gold); }
+.donate-desc { font-size: 16px; line-height: 1.8; color: var(--muted); margin-bottom: 32px; }
+.donate-amounts { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.amount-btn { border: 1px solid var(--border); background: transparent; color: var(--foam); padding: 12px 24px; border-radius: 4px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
+.amount-btn:hover, .amount-btn.active { background: var(--sky); border-color: var(--sky); color: var(--white); }
+.donate-note { font-size: 13px; color: var(--muted); }
+.donate-card { background: var(--water); border: 1px solid var(--border); border-radius: 12px; padding: 40px; }
+.email-form { display: flex; flex-direction: column; gap: 12px; }
+.email-form input { background: rgba(10,22,40,0.8); border: 1px solid var(--border); color: var(--foam); padding: 14px 16px; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
+.email-form input:focus { border-color: var(--sky); }
+.email-form input::placeholder { color: var(--muted); }
+.email-form button { background: var(--sky); color: var(--white); border: none; padding: 14px; border-radius: 4px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; cursor: pointer; transition: background 0.2s; }
+.email-form button:hover { background: #3a8fd4; }
+.form-note { font-size: 12px; color: var(--muted); text-align: center; }
+.form-success { display: none; text-align: center; padding: 20px; }
+.form-success .check { font-size: 48px; margin-bottom: 12px; }
+.form-success p { color: var(--foam); font-size: 16px; }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 4px; color: var(--muted); }
+.footer-logo span { color: var(--sky); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-links a:hover { color: var(--foam); }
+.footer-copy { font-size: 12px; color: rgba(106,143,175,0.5); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeLeft { from{opacity:0;transform:translate(24px,-50%)} to{opacity:1;transform:translate(0,-50%)} }
+@keyframes waveDrift { 0%,100%{transform:translateX(0)} 50%{transform:translateX(4%)} }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 300px; }
+  .hero-screen { position: relative; right: auto; top: auto; transform: none; width: 100%; margin-top: 48px; animation: fadeUp 0.8s 1s forwards; }
+  .container { padding: 0 24px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .compare-table { overflow-x: auto; }
+  .donate-inner { grid-template-columns: 1fr; gap: 40px; }
+  footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="ocean-bg">
+  <div class="stars"></div>
+  <div class="wave wave1"></div>
+  <div class="wave wave2"></div>
+  <div class="horizon-glow"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>Line</span>Up</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#compare">Compare</a>
+    <a href="#donate">Support</a>
+    <a href="app.html" class="nav-cta">Launch App</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;z-index:1;">
+<div class="hero">
+  <div class="hero-eyebrow">GPS Race Start Timer</div>
+  <div class="hero-title">LINE<br>UP.</div>
+  <div class="hero-title-sub">Hit the gun. Every time.</div>
+  <p class="hero-desc">
+    A <strong>free GPS start timer</strong> for sailboat racing. Real-time burn time, start line geometry, favored end — all on your phone or tablet. No hardware required.
+  </p>
+  <div class="hero-actions">
+    <a href="app.html" class="btn-primary">Launch Free App</a>
+    <a href="#how" class="btn-secondary">How It Works</a>
+  </div>
+  <p class="hero-note">Works on any phone or tablet · No install · No account · Free forever</p>
+
+  <!-- Mock screen -->
+  <div class="hero-screen">
+    <div class="ms-label">Countdown</div>
+    <div class="ms-time" id="demoTime">2:14</div>
+    <div class="ms-row">
+      <div class="ms-cell"><div class="ms-cl">Burn</div><div class="ms-cv go" id="demoBurn">0:38</div></div>
+      <div class="ms-cell"><div class="ms-cl">SOG</div><div class="ms-cv">6.1kt</div></div>
+      <div class="ms-cell"><div class="ms-cl">COG</div><div class="ms-cv">053°</div></div>
+      <div class="ms-cell"><div class="ms-cl">Mode</div><div class="ms-cv">5min</div></div>
+    </div>
+    <div class="ms-near">
+      <div class="ms-cell"><div class="ms-cl">PIN</div><div class="ms-cv" style="font-size:16px;color:var(--sky)" id="demoPin">0.14nm</div></div>
+      <div class="ms-cell"><div class="ms-cl">RC</div><div class="ms-cv" style="font-size:16px;color:var(--sky)" id="demoRC">0.29nm</div></div>
+      <div class="ms-cell"><div class="ms-cl">LINE</div><div class="ms-cv" style="font-size:16px;color:var(--sky)" id="demoLine">0.042nm</div></div>
+      <div class="ms-cell"><div class="ms-cl">FAV</div><div class="ms-cv" style="font-size:16px;color:var(--coral)">PIN</div></div>
+    </div>
+    <div class="ms-dots">
+      <div class="ms-dot f"></div><div class="ms-dot f"></div>
+      <div class="ms-dot f"></div><div class="ms-dot e"></div>
+    </div>
+    <div class="ms-tag">[RACING]</div>
+  </div>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+<div class="container">
+  <div class="section-label">What it does</div>
+  <div class="section-title">Everything you need.<br><em>Nothing you don't.</em></div>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-num">01</div>
+      <div class="feat-title">GPS Start Line Geometry</div>
+      <div class="feat-desc">Mark the PIN and RC boat ends independently. Real-time distance to each end, perpendicular distance to the line, and favored end calculation — all from your tablet's built-in GPS.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">02</div>
+      <div class="feat-title">Burn Time Calculator</div>
+      <div class="feat-desc">Always-visible burn time based on your current speed and distance to the line. Counts down to zero at the gun, not before. Flips to GO when it's time to head for the line.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">03</div>
+      <div class="feat-title">Precise Beep Schedule</div>
+      <div class="feat-desc">Audible signals at every minute mark, the 30-second mark, every second inside 10 seconds, and a distinct tone for the final 5 seconds. Never miss a gun signal.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">04</div>
+      <div class="feat-title">Smart RESYNC</div>
+      <div class="feat-desc">Missed the gun? One tap snaps the timer down to the next lower whole minute — you can never accidentally put yourself ahead of the race committee.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">05</div>
+      <div class="feat-title">Works on Anything</div>
+      <div class="feat-desc">Runs in any modern browser. Android, iPad, iPhone, laptop. Add to your home screen for a full-screen native app experience. No App Store. No install. No account.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">06</div>
+      <div class="feat-title">Marine-Grade Display</div>
+      <div class="feat-desc">Dark high-contrast interface designed for sunlight readability. Large Bebas Neue numerals visible at a glance from the helm. Screen-wake lock keeps it on during the race.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+<div class="container">
+  <div class="section-label">Race day</div>
+  <div class="section-title">Up and running<br><em>in four steps.</em></div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Open LineUp in Chrome</div>
+      <div class="step-desc">Tap "Add to Home Screen" to install as a full-screen app. Allow location access when prompted.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Set the start line</div>
+      <div class="step-desc">Sail to the PIN end, tap MARK PIN. Sail to the RC boat, tap MARK RC. Line geometry activates immediately.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Sync at the gun</div>
+      <div class="step-desc">Tap SYNC the moment the 5-minute warning gun fires. Use RESYNC at any subsequent gun to stay locked in.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">Hit the line</div>
+      <div class="step-desc">Watch burn time count to zero, listen for the beeps, and aim for the favored end. Perfect start, every time.</div>
+    </div>
+  </div>
+  <div style="margin-top:48px;">
+    <a href="instructions.html" class="btn-secondary">Full Instructions →</a>
+  </div>
+</div>
+</section>
+
+<!-- COMPARE -->
+<section class="compare" id="compare">
+<div class="container">
+  <div class="section-label">How we compare</div>
+  <div class="section-title">Pro-level features.<br><em>Zero cost.</em></div>
+  <div class="compare-table">
+    <div class="ct-header">
+      <div class="ct-cell">Feature</div>
+      <div class="ct-cell hl">LineUp</div>
+      <div class="ct-cell">Countdown watch</div>
+      <div class="ct-cell">Velocitek ProStart</div>
+    </div>
+    <div class="ct-row"><div class="ct-cell feature">GPS distance to line</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Burn time calculation</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Favored end analysis</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">PIN + RC waypoints</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Audible countdown signals</div><div class="ct-cell yes hl">✓</div><div class="ct-cell yes">✓</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">5 + 3 min sequences</div><div class="ct-cell yes hl">✓</div><div class="ct-cell yes">✓</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Works on your existing device</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell no">✗</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Cost</div><div class="ct-cell hl" style="color:var(--gold);font-weight:500">Free</div><div class="ct-cell">$30–80</div><div class="ct-cell">$499</div></div>
+  </div>
+</div>
+</section>
+
+<!-- DONATE -->
+<section class="donate" id="donate">
+<div class="container">
+<div class="donate-inner">
+  <div>
+    <div class="section-label">Support LineUp</div>
+    <div class="donate-title">Free to use.<br><em>Yours to support.</em></div>
+    <p class="donate-desc">LineUp is free and always will be. If it helped you nail a start, consider buying the developer a cup of coffee. Every contribution helps keep the project alive and growing.</p>
+    <div class="donate-amounts">
+      <button class="amount-btn" onclick="setAmount(5, this)">$5</button>
+      <button class="amount-btn active" onclick="setAmount(10, this)">$10</button>
+      <button class="amount-btn" onclick="setAmount(20, this)">$20</button>
+      <button class="amount-btn" onclick="setAmount(50, this)">$50</button>
+    </div>
+    <p class="donate-note">Payments handled securely via PayPal. No account required.</p>
+    <br>
+    <a href="https://www.paypal.com/donate" id="donateBtn" class="btn-primary" target="_blank" style="margin-top:8px">Donate $10 via PayPal</a>
+  </div>
+  <div class="donate-card">
+    <div class="section-label" style="margin-bottom:12px">Stay in the loop</div>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6">Get notified when new features ship — wind integration, native app, hardware kit, and more.</p>
+    <div class="email-form" id="emailForm">
+      <input type="text" placeholder="Your name" id="emailName">
+      <input type="email" placeholder="Email address" id="emailAddr">
+      <button onclick="submitEmail()">Notify Me</button>
+      <p class="form-note">No spam. Unsubscribe anytime.</p>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <div class="check">⛵</div>
+      <p>You're on the list. Fair winds!</p>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>Line</span>Up</div>
+  <div class="footer-links">
+    <a href="app.html">Launch App</a>
+    <a href="instructions.html">Instructions</a>
+    <a href="#donate">Support</a>
+    <a href="#compare">Compare</a>
+  </div>
+  <div class="footer-copy">© 2026 LineUp · Free GPS Race Start Timer</div>
+</footer>
+
+<script>
+// Animated demo screen
+let demoSec = 134;
+setInterval(() => {
+  demoSec = Math.max(0, demoSec - 1);
+  const m = Math.floor(demoSec/60), s = demoSec%60;
+  document.getElementById('demoTime').textContent = m + ':' + String(s).padStart(2,'0');
+  const burn = Math.max(0, demoSec - 96);
+  const bm = Math.floor(burn/60), bs = burn%60;
+  document.getElementById('demoBurn').textContent = burn > 0 ? bm+':'+String(bs).padStart(2,'0') : 'GO!';
+  document.getElementById('demoPin').textContent  = (0.14 - (134-demoSec)*0.0003).toFixed(2)+'nm';
+  document.getElementById('demoRC').textContent   = (0.29 - (134-demoSec)*0.0002).toFixed(2)+'nm';
+  document.getElementById('demoLine').textContent = (0.042 - (134-demoSec)*0.0001).toFixed(3)+'nm';
+  if (demoSec === 0) demoSec = 134;
+}, 1000);
+
+// Donate amount buttons
+let donateAmount = 10;
+function setAmount(amt, el) {
+  donateAmount = amt;
+  document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('donateBtn').textContent = 'Donate $' + amt + ' via PayPal';
+}
+
+// Email signup (localStorage for demo — replace with your backend)
+function submitEmail() {
+  const name = document.getElementById('emailName').value.trim();
+  const email = document.getElementById('emailAddr').value.trim();
+  if (!email || !email.includes('@')) { alert('Please enter a valid email'); return; }
+  // In production: POST to your email service (Mailchimp, ConvertKit, etc.)
+  console.log('Signup:', name, email);
+  document.getElementById('emailForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+</script>
+</body>
+</html>
