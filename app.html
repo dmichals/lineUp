@@ -24,36 +24,35 @@
   --muted:   #4a6a8a;
   --text:    #d8eaf8;
   --white:   #ffffff;
+  --wind:    #c084fc;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; touch-action: manipulation; }
-
-.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding: 10px 12px; gap: 8px; }
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding: 10px 12px; gap: 7px; }
 
 /* ── HEADER ── */
 .header { display: flex; justify-content: space-between; align-items: center; padding: 0 2px; flex-shrink: 0; }
 .logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--muted); }
 .logo span { color: var(--accent); }
-.header-right { display: flex; align-items: center; gap: 12px; }
+.header-right { display: flex; align-items: center; gap: 8px; }
 .gps-pill { display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--panel); border: 1px solid var(--border); border-radius: 20px; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); }
 .gps-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
 .gps-dot.locked    { background: var(--go);   box-shadow: 0 0 5px var(--go); }
 .gps-dot.searching { background: var(--warn); animation: blink 1s infinite; }
 .mode-pill { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent); background: rgba(45,127,193,0.1); border: 1px solid rgba(45,127,193,0.25); padding: 5px 10px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
-.mode-pill:hover { background: rgba(45,127,193,0.2); }
 
 /* ── COUNTDOWN ── */
-.countdown { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px 10px; flex-shrink: 0; position: relative; overflow: hidden; }
+.countdown { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px 8px; flex-shrink: 0; position: relative; overflow: hidden; }
 .countdown::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
 .countdown.running::after { opacity: 1; animation: shimmer 3s linear infinite; }
-.cd-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.cd-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+.cd-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.cd-label  { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
 .cd-status { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 1px; }
-.cd-time { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 20vw, 120px); line-height: 0.88; text-align: center; color: var(--text); letter-spacing: 3px; transition: color 0.4s; }
+.cd-time { font-family: 'Bebas Neue', sans-serif; font-size: clamp(68px, 19vw, 116px); line-height: 0.88; text-align: center; color: var(--text); letter-spacing: 3px; transition: color 0.4s; }
 .cd-time.warn   { color: var(--warn); }
 .cd-time.urgent { color: var(--coral); }
 .cd-time.go     { color: var(--go); text-shadow: 0 0 30px rgba(61,220,132,0.4); }
-.cd-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.cd-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
 .signal-dots { display: flex; gap: 7px; }
 .sdot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--muted); transition: all 0.4s; }
 .sdot.on  { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 5px var(--accent); }
@@ -62,69 +61,93 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .flash-overlay { position: absolute; inset: 0; border-radius: 14px; opacity: 0; pointer-events: none; }
 
 /* ── DATA ROW ── */
-.data-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; flex-shrink: 0; }
-.dc { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 9px 6px; text-align: center; }
-.dc.hi { border-color: rgba(45,127,193,0.4); }
+.data-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex-shrink: 0; }
+.dc { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 8px 6px; text-align: center; }
+.dc.hi   { border-color: rgba(45,127,193,0.4); }
+.dc.wind { border-color: rgba(192,132,252,0.4); }
 .dc .lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-.dc .val { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px, 5vw, 32px); line-height: 1.1; color: var(--text); }
+.dc .val { font-family: 'Bebas Neue', sans-serif; font-size: clamp(18px, 4.5vw, 30px); line-height: 1.1; color: var(--text); }
 .dc .val.go   { color: var(--go); }
 .dc .val.warn { color: var(--warn); }
-.dc .val.dim  { color: var(--muted); font-size: clamp(16px, 4vw, 24px); }
+.dc .val.wnd  { color: var(--wind); }
+.dc .val.dim  { color: var(--muted); font-size: clamp(14px, 3.5vw, 22px); }
+
+/* ── WIND PANEL ── */
+.wind-panel { background: rgba(192,132,252,0.05); border: 1px solid rgba(192,132,252,0.2); border-radius: 10px; padding: 9px 12px; flex-shrink: 0; transition: border-color 0.3s; }
+.wind-panel.active { border-color: rgba(192,132,252,0.5); }
+.wp-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.wp-label  { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--wind); letter-spacing: 2px; text-transform: uppercase; }
+.wp-status { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); }
+.wp-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; }
+.btn-wind { border: 1.5px solid rgba(192,132,252,0.35); background: rgba(192,132,252,0.07); color: var(--wind); border-radius: 8px; padding: 10px 8px; font-family: 'Bebas Neue', sans-serif; font-size: clamp(12px, 3vw, 16px); letter-spacing: 1px; cursor: pointer; transition: all 0.14s; text-align: center; -webkit-user-select: none; user-select: none; line-height: 1.2; }
+.btn-wind:active { background: rgba(192,132,252,0.2); transform: scale(0.96); }
+.wp-centre { text-align: center; }
+.wp-twd-big { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 8vw, 44px); color: var(--wind); line-height: 1; }
+.wp-twd-big.dim { color: var(--muted); font-size: clamp(22px, 6vw, 32px); }
+.wp-twd-lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; }
+.wp-right { display: flex; flex-direction: column; gap: 5px; }
+.wind-manual-row { display: flex; gap: 5px; }
+.wind-input { flex: 1; min-width: 0; background: rgba(10,20,40,0.8); border: 1px solid rgba(192,132,252,0.3); color: var(--text); padding: 9px 8px; border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; outline: none; text-align: center; transition: border-color 0.2s; }
+.wind-input:focus { border-color: var(--wind); }
+.wind-input::placeholder { color: var(--muted); font-size: 13px; letter-spacing: 0; }
+.btn-wind-sm { border: 1.5px solid rgba(192,132,252,0.35); background: rgba(192,132,252,0.07); color: var(--wind); border-radius: 8px; padding: 9px 10px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; cursor: pointer; transition: all 0.14s; -webkit-user-select: none; user-select: none; }
+.btn-wind-sm:active { background: rgba(192,132,252,0.2); transform: scale(0.96); }
+.btn-wind-clr { border: 1.5px solid var(--border); background: transparent; color: var(--muted); border-radius: 8px; padding: 7px 8px; font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: all 0.14s; text-align: center; -webkit-user-select: none; user-select: none; }
+.btn-wind-clr:active { background: var(--raised); }
 
 /* ── NEAR LINE ── */
-.nearline { background: rgba(45,127,193,0.06); border: 1px solid rgba(45,127,193,0.3); border-radius: 10px; padding: 9px 12px; display: none; flex-shrink: 0; }
+.nearline { background: rgba(45,127,193,0.06); border: 1px solid rgba(45,127,193,0.3); border-radius: 10px; padding: 8px 12px; display: none; flex-shrink: 0; }
 .nearline.show { display: block; }
-.nl-hdr { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 7px; }
-.nl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.nl-hdr { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.nl-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
 .nl-cell { text-align: center; }
 .nl-lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; }
-.nl-val { font-family: 'Bebas Neue', sans-serif; font-size: clamp(16px, 4vw, 24px); color: var(--bright); line-height: 1.1; }
-.nl-val.pin { color: var(--go); }
-.nl-val.rc  { color: var(--coral); }
+.nl-val { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 3.5vw, 22px); color: var(--bright); line-height: 1.1; }
+.nl-val.pin  { color: var(--go); }
+.nl-val.rc   { color: var(--coral); }
+.nl-val.bias { color: var(--wind); font-size: clamp(12px, 3vw, 18px); }
 
-/* ── MARK STATUS ── */
-.marks { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; flex-shrink: 0; }
-.mark { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; display: flex; align-items: center; gap: 8px; transition: border-color 0.3s; }
+/* ── MARKS ── */
+.marks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; flex-shrink: 0; }
+.mark { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; transition: border-color 0.3s; }
 .mark.set { border-color: rgba(61,220,132,0.4); }
 .mark-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; transition: all 0.3s; }
 .mark.set .mark-dot { background: var(--go); box-shadow: 0 0 5px var(--go); }
 .mark-info { flex: 1; }
 .mark-name { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; }
 .mark.set .mark-name { color: var(--go); }
-.mark-dist { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: var(--text); }
+.mark-dist { font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--text); }
 
 /* ── BUTTONS ── */
-.btn-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; flex-shrink: 0; }
-.btn-row-2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; flex-shrink: 0; }
-.btn { border: 1.5px solid var(--border); background: var(--panel); color: var(--text); border-radius: 10px; padding: 13px 6px; font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 3.5vw, 20px); letter-spacing: 2px; cursor: pointer; transition: all 0.14s; text-align: center; -webkit-user-select: none; user-select: none; position: relative; overflow: hidden; }
+.btn-row   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex-shrink: 0; }
+.btn-row-2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; flex-shrink: 0; }
+.btn { border: 1.5px solid var(--border); background: var(--panel); color: var(--text); border-radius: 10px; padding: 11px 6px; font-family: 'Bebas Neue', sans-serif; font-size: clamp(13px, 3.2vw, 19px); letter-spacing: 2px; cursor: pointer; transition: all 0.14s; text-align: center; -webkit-user-select: none; user-select: none; }
 .btn:active { transform: scale(0.96); }
-.btn.sync   { border-color: rgba(45,127,193,0.6);  color: var(--bright); }
+.btn.sync   { border-color: rgba(45,127,193,0.6); color: var(--bright); }
 .btn.sync:active   { background: var(--accent); color: var(--white); }
 .btn.resync { color: var(--muted); }
 .btn.resync:active { background: var(--raised); }
 .btn.mode   { color: var(--muted); }
 .btn.mode:active   { background: var(--raised); }
-.btn.pin    { border-color: rgba(61,220,132,0.5); color: var(--go); }
+.btn.pin    { border-color: rgba(61,220,132,0.5);  color: var(--go); }
 .btn.pin:active    { background: rgba(61,220,132,0.15); }
-.btn.rc     { border-color: rgba(255,107,74,0.5); color: var(--coral); }
+.btn.rc     { border-color: rgba(255,107,74,0.5);  color: var(--coral); }
 .btn.rc:active     { background: rgba(255,107,74,0.15); }
-.btn.clr    { color: var(--muted); font-size: clamp(11px, 2.5vw, 14px); letter-spacing: 1px; }
+.btn.clr    { color: var(--muted); font-size: clamp(10px, 2.3vw, 13px); letter-spacing: 1px; }
 .btn.clr:active    { background: var(--raised); }
 
 /* ── TOAST ── */
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--raised); border: 1px solid rgba(45,127,193,0.4); border-radius: 8px; padding: 10px 20px; font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); white-space: nowrap; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 200; pointer-events: none; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--raised); border: 1px solid rgba(45,127,193,0.4); border-radius: 8px; padding: 10px 20px; font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); white-space: nowrap; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 200; pointer-events: none; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ── ANIMATIONS ── */
-@keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0.2} }
-@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+@keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0.2} }
+@keyframes shimmer  { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 @keyframes flashPop { 0%{opacity:0.45} 100%{opacity:0} }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="logo"><span>Line</span>Up</div>
     <div class="header-right">
@@ -136,7 +159,6 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
     </div>
   </div>
 
-  <!-- COUNTDOWN -->
   <div class="countdown" id="cdPanel">
     <div class="flash-overlay" id="flashOverlay"></div>
     <div class="cd-top">
@@ -146,35 +168,54 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
     <div class="cd-time" id="cdTime">5:00</div>
     <div class="cd-bottom">
       <div class="signal-dots">
-        <div class="sdot" id="sd0"></div>
-        <div class="sdot" id="sd1"></div>
-        <div class="sdot" id="sd2"></div>
-        <div class="sdot" id="sd3"></div>
+        <div class="sdot" id="sd0"></div><div class="sdot" id="sd1"></div>
+        <div class="sdot" id="sd2"></div><div class="sdot" id="sd3"></div>
       </div>
       <div class="race-tag" id="raceTag">[READY]</div>
     </div>
   </div>
 
-  <!-- DATA ROW -->
   <div class="data-row">
-    <div class="dc hi"><div class="lbl">Burn</div><div class="val dim" id="dBurn">----</div></div>
-    <div class="dc"><div class="lbl">SOG</div><div class="val dim" id="dSOG">--.-</div></div>
-    <div class="dc"><div class="lbl">COG</div><div class="val dim" id="dCOG">---</div></div>
-    <div class="dc"><div class="lbl">Acc</div><div class="val dim" id="dAcc">--m</div></div>
+    <div class="dc hi">  <div class="lbl">Burn</div><div class="val dim" id="dBurn">----</div></div>
+    <div class="dc">     <div class="lbl">SOG</div> <div class="val dim" id="dSOG">--.-</div></div>
+    <div class="dc">     <div class="lbl">COG</div> <div class="val dim" id="dCOG">---</div></div>
+    <div class="dc wind"><div class="lbl">TWD</div> <div class="val dim wnd" id="dTWD">---</div></div>
   </div>
 
-  <!-- NEAR LINE -->
-  <div class="nearline" id="nearline">
-    <div class="nl-hdr">▸ Near line</div>
-    <div class="nl-grid">
-      <div class="nl-cell"><div class="nl-lbl">PIN</div><div class="nl-val" id="nlPin">--</div></div>
-      <div class="nl-cell"><div class="nl-lbl">RC</div><div class="nl-val" id="nlRC">--</div></div>
-      <div class="nl-cell"><div class="nl-lbl">Line</div><div class="nl-val" id="nlLine">--</div></div>
-      <div class="nl-cell"><div class="nl-lbl">Fav</div><div class="nl-val" id="nlFav">--</div></div>
+  <!-- WIND PANEL -->
+  <div class="wind-panel" id="windPanel">
+    <div class="wp-top">
+      <div class="wp-label">True wind direction</div>
+      <div class="wp-status" id="wpStatus">Not set — COG fallback</div>
+    </div>
+    <div class="wp-grid">
+      <button class="btn-wind" onclick="doHeadToWind()">Head to<br>Wind ↑</button>
+      <div class="wp-centre">
+        <div class="wp-twd-big dim" id="wpTWD">---°</div>
+        <div class="wp-twd-lbl">TWD</div>
+      </div>
+      <div class="wp-right">
+        <div class="wind-manual-row">
+          <input class="wind-input" id="windIn" type="number" min="0" max="359" placeholder="000°"
+                 onkeydown="if(event.key==='Enter')doManualWind()">
+          <button class="btn-wind-sm" onclick="doManualWind()">Set</button>
+        </div>
+        <button class="btn-wind-clr" onclick="doClearWind()">Clear wind</button>
+      </div>
     </div>
   </div>
 
-  <!-- MARK STATUS -->
+  <div class="nearline" id="nearline">
+    <div class="nl-hdr">▸ Near line</div>
+    <div class="nl-grid">
+      <div class="nl-cell"><div class="nl-lbl">PIN</div>  <div class="nl-val" id="nlPin">--</div></div>
+      <div class="nl-cell"><div class="nl-lbl">RC</div>   <div class="nl-val" id="nlRC">--</div></div>
+      <div class="nl-cell"><div class="nl-lbl">Line</div> <div class="nl-val" id="nlLine">--</div></div>
+      <div class="nl-cell"><div class="nl-lbl">Fav</div>  <div class="nl-val" id="nlFav">--</div></div>
+      <div class="nl-cell"><div class="nl-lbl">Bias</div> <div class="nl-val bias" id="nlBias">--</div></div>
+    </div>
+  </div>
+
   <div class="marks">
     <div class="mark" id="pinMark">
       <div class="mark-dot"></div>
@@ -192,14 +233,11 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
     </div>
   </div>
 
-  <!-- TIMER BUTTONS -->
   <div class="btn-row">
     <button class="btn sync"   onclick="doSync()">Sync</button>
     <button class="btn resync" onclick="doResync()">Resync ↓</button>
     <button class="btn mode"   onclick="doMode()" id="modeBtn">5 Min</button>
   </div>
-
-  <!-- MARK BUTTONS -->
   <div class="btn-row-2">
     <button class="btn pin" onclick="doMarkPin()">Mark PIN</button>
     <button class="btn rc"  onclick="doMarkRC()">Mark RC</button>
@@ -207,82 +245,65 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   </div>
 
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 const S = {
   running:false, startMs:0, mode:5,
-  pinSet:false, rcSet:false,
-  pinLat:0, pinLon:0, rcLat:0, rcLon:0,
-  lastBeepSec:-1,
-  lat:0, lon:0, sog:0, cog:0, acc:999,
-  gpsReady:false,
-  distPin:0, distRC:0, distLine:0,
-  burnTime:0, favored:'',
+  pinSet:false, rcSet:false, pinLat:0, pinLon:0, rcLat:0, rcLon:0,
+  lastBeepSec:-1, lat:0, lon:0, sog:0, cog:0, acc:999, gpsReady:false,
+  twd:null, twdSource:'',
+  distPin:0, distRC:0, distLine:0, burnTime:0, favored:'', favorBias:0,
   audioCtx:null, ticker:null,
 };
 const R = 3440.065;
 
-function audio() {
-  if (!S.audioCtx) try { S.audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){}
-  return S.audioCtx;
+function audio(){ if(!S.audioCtx) try{S.audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){} return S.audioCtx; }
+function tone(freq,dur,vol=0.45){
+  const ctx=audio();if(!ctx)return;
+  try{
+    if(ctx.state==='suspended')ctx.resume();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.type='square';o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    o.start();o.stop(ctx.currentTime+dur+0.01);
+  }catch(e){}
 }
-function tone(freq,dur,vol=0.45) {
-  const ctx=audio(); if(!ctx) return;
-  try {
-    if(ctx.state==='suspended') ctx.resume();
-    const o=ctx.createOscillator(), g=ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.type='square'; o.frequency.value=freq;
-    g.gain.setValueAtTime(vol,ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
-    o.start(); o.stop(ctx.currentTime+dur+0.01);
-  } catch(e){}
-}
-function flash(type) {
+function flash(t){
   const ov=document.getElementById('flashOverlay');
-  ov.style.background = type==='long' ? 'rgba(255,107,74,0.18)' : 'rgba(45,127,193,0.18)';
-  ov.style.animation='flashPop 0.2s forwards';
-  setTimeout(()=>ov.style.animation='',250);
+  ov.style.background=t==='long'?'rgba(255,107,74,0.18)':'rgba(45,127,193,0.18)';
+  ov.style.animation='flashPop 0.2s forwards';setTimeout(()=>ov.style.animation='',250);
 }
-function beep(type) {
-  if(type==='short')  { tone(1800,0.07); flash('short'); }
-  if(type==='short2') { tone(1800,0.07); setTimeout(()=>tone(1800,0.07),170); flash('short'); }
-  if(type==='long')   { tone(2400,0.22); flash('long'); }
-  if(type==='gun')    { tone(2400,0.4); setTimeout(()=>tone(2400,0.4),480); setTimeout(()=>tone(2400,0.4),960); flash('long'); }
+function beep(t){
+  if(t==='short') {tone(1800,0.07);flash('short');}
+  if(t==='short2'){tone(1800,0.07);setTimeout(()=>tone(1800,0.07),170);flash('short');}
+  if(t==='long')  {tone(2400,0.22);flash('long');}
+  if(t==='gun')   {tone(2400,0.4);setTimeout(()=>tone(2400,0.4),480);setTimeout(()=>tone(2400,0.4),960);flash('long');}
 }
 
-function startGPS() {
-  if(!navigator.geolocation){ toast('GPS not available'); return; }
+function startGPS(){
+  if(!navigator.geolocation){toast('GPS not available');return;}
   document.getElementById('gpsDot').className='gps-dot searching';
   document.getElementById('gpsLabel').textContent='Searching';
   navigator.geolocation.watchPosition(p=>{
-    S.lat=p.coords.latitude; S.lon=p.coords.longitude;
-    S.acc=Math.round(p.coords.accuracy);
-    if(p.coords.speed!=null) S.sog=p.coords.speed*1.94384;
-    if(p.coords.heading!=null) S.cog=p.coords.heading;
+    S.lat=p.coords.latitude;S.lon=p.coords.longitude;S.acc=Math.round(p.coords.accuracy);
+    if(p.coords.speed!=null)S.sog=p.coords.speed*1.94384;
+    if(p.coords.heading!=null)S.cog=p.coords.heading;
     S.gpsReady=true;
     document.getElementById('gpsDot').className='gps-dot locked';
     document.getElementById('gpsLabel').textContent='±'+S.acc+'m';
-    if(lineReady()) calcLine();
-  }, ()=>{
-    S.gpsReady=false;
-    document.getElementById('gpsDot').className='gps-dot searching';
-    document.getElementById('gpsLabel').textContent='No GPS';
-  },{enableHighAccuracy:true,timeout:15000,maximumAge:1000});
+    if(lineReady())calcLine();
+  },()=>{S.gpsReady=false;document.getElementById('gpsDot').className='gps-dot searching';document.getElementById('gpsLabel').textContent='No GPS';},
+  {enableHighAccuracy:true,timeout:15000,maximumAge:1000});
 }
 
-function rem() {
-  if(!S.running) return S.mode*60;
-  return Math.max(0, S.mode*60 - Math.floor((Date.now()-S.startMs)/1000));
-}
-function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
-function lineReady(){ return S.pinSet&&S.rcSet; }
+function rem(){if(!S.running)return S.mode*60;return Math.max(0,S.mode*60-Math.floor((Date.now()-S.startMs)/1000));}
+function fmt(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function lineReady(){return S.pinSet&&S.rcSet;}
 
 function haversine(a,b,c,d){
-  const dLat=(c-a)*Math.PI/180,dLon=(d-b)*Math.PI/180;
-  const x=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;
+  const dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;
+  const x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)**2;
   return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
 function bearing(a,b,c,d){
@@ -297,141 +318,171 @@ function crossTrack(pLa,pLo,aLa,aLo,bLa,bLo){
   const bAP=bearing(aLa,aLo,pLa,pLo)*Math.PI/180;
   return Math.abs(Math.asin(Math.sin(d)*Math.sin(bAP-bAB))*R);
 }
+
+// ── Favored end with true wind ─────────────────────────────
+// Wind comes FROM twd (e.g. twd=045 means NE wind blowing toward SW)
+// The line goes from PIN to RC at bearing lb
+// Each end has a bearing from the line midpoint
+// The end whose bearing is closest to twd (directly upwind) is more upwind = favored
+// favorBias = degrees advantage of favored end over the other
+function calcFavored(lb){
+  const wind = S.twd !== null ? S.twd : S.cog;
+  // Angle each end makes relative to the wind
+  // We compare: bearing of PIN end vs bearing of RC end vs wind direction
+  // PIN end is in direction lb from the line, RC is lb+180
+  const pinAngle = Math.abs(((lb       - wind + 540) % 360) - 180);
+  const rcAngle  = Math.abs(((lb + 180 - wind + 540) % 360) - 180);
+  // Smaller angle = closer to directly upwind = favored
+  if(pinAngle < rcAngle){
+    S.favored='PIN'; S.favorBias=Math.round(rcAngle-pinAngle);
+  } else {
+    S.favored='RC';  S.favorBias=Math.round(pinAngle-rcAngle);
+  }
+}
+
 function calcLine(){
-  if(!lineReady()||!S.gpsReady) return;
+  if(!lineReady()||!S.gpsReady)return;
   S.distPin  = haversine(S.lat,S.lon,S.pinLat,S.pinLon);
   S.distRC   = haversine(S.lat,S.lon,S.rcLat, S.rcLon);
   S.distLine = crossTrack(S.lat,S.lon,S.pinLat,S.pinLon,S.rcLat,S.rcLon);
-  if(S.sog>0.3) S.burnTime = rem()-(S.distLine/S.sog)*3600;
-  const lb=bearing(S.pinLat,S.pinLon,S.rcLat,S.rcLon);
-  S.favored=((S.cog-lb+360)%360)<180?'PIN':'RC';
+  if(S.sog>0.3) S.burnTime=rem()-(S.distLine/S.sog)*3600;
+  calcFavored(bearing(S.pinLat,S.pinLon,S.rcLat,S.rcLon));
 }
 
 function checkBeeps(r){
-  if(r===S.lastBeepSec) return; S.lastBeepSec=r;
-  const s=r%60;
-  if(r===0)       beep('gun');
-  else if(r<=5)   beep('long');
-  else if(r<=10)  beep('short');
-  else if(s===30) beep('short2');
-  else if(s===0)  beep('short');
+  if(r===S.lastBeepSec)return;S.lastBeepSec=r;const s=r%60;
+  if(r===0)beep('gun');else if(r<=5)beep('long');else if(r<=10)beep('short');
+  else if(s===30)beep('short2');else if(s===0)beep('short');
 }
 
 function tick(){
   const r=rem();
-  if(S.gpsReady&&lineReady()) calcLine();
-  if(S.running) checkBeeps(r);
+  if(S.gpsReady&&lineReady())calcLine();
+  if(S.running)checkBeeps(r);
 
-  // countdown
   const ct=document.getElementById('cdTime');
   ct.textContent=fmt(r);
   ct.className='cd-time'+(r===0?' go':r<=5?' urgent':r<=30?' warn':'');
-  document.getElementById('cdLabel').textContent = !S.running?'Ready':r===0?'Racing':'Running';
-  document.getElementById('cdStatus').textContent = !S.running?'Tap sync at the gun':S.mode+'-min sequence';
-  document.getElementById('raceTag').textContent  = S.running?'[RACING]':'[READY]';
+  document.getElementById('cdLabel').textContent  =!S.running?'Ready':r===0?'Racing':'Running';
+  document.getElementById('cdStatus').textContent =!S.running?'Tap sync at the gun':S.mode+'-min sequence';
+  document.getElementById('raceTag').textContent  =S.running?'[RACING]':'[READY]';
 
-  // dots
-  const tot=S.mode*60, el=tot-r;
-  let f=0;
-  if(el>=0)f=1; if(el>=60)f=2; if(el>=(S.mode-1)*60)f=3; if(r===0)f=4;
-  for(let i=0;i<4;i++){
-    const d=document.getElementById('sd'+i);
-    d.className='sdot'+(i<f?(r===0?' gun':' on'):'');
-  }
+  const tot=S.mode*60,el=tot-r;let f=0;
+  if(el>=0)f=1;if(el>=60)f=2;if(el>=(S.mode-1)*60)f=3;if(r===0)f=4;
+  for(let i=0;i<4;i++){const d=document.getElementById('sd'+i);d.className='sdot'+(i<f?(r===0?' gun':' on'):'');}
 
-  // burn
   const bv=document.getElementById('dBurn');
   if(lineReady()&&S.gpsReady){
     if(S.burnTime>0){bv.textContent=fmt(S.burnTime);bv.className='val';}
     else if(S.running){bv.textContent='GO!';bv.className='val go';}
     else{bv.textContent='0:00';bv.className='val dim';}
-  } else {bv.textContent='----';bv.className='val dim';}
+  }else{bv.textContent='----';bv.className='val dim';}
 
-  // sog/cog/acc
-  const sv=document.getElementById('dSOG'),cv=document.getElementById('dCOG'),av=document.getElementById('dAcc');
-  if(S.gpsReady){
-    sv.textContent=S.sog.toFixed(1)+'kt'; sv.className='val';
-    cv.textContent=Math.round(S.cog)+'°'; cv.className='val';
-    av.textContent=S.acc+'m';             av.className='val'+(S.acc>20?' warn':'');
-  } else {
-    sv.textContent='--.-'; sv.className='val dim';
-    cv.textContent='---';  cv.className='val dim';
-    av.textContent='--m';  av.className='val dim';
+  const sv=document.getElementById('dSOG'),cv=document.getElementById('dCOG'),tw=document.getElementById('dTWD');
+  if(S.gpsReady){sv.textContent=S.sog.toFixed(1)+'kt';sv.className='val';cv.textContent=Math.round(S.cog)+'°';cv.className='val';}
+  else{sv.textContent='--.-';sv.className='val dim';cv.textContent='---';cv.className='val dim';}
+  if(S.twd!==null){tw.textContent=Math.round(S.twd)+'°';tw.className='val wnd';}
+  else{tw.textContent='---';tw.className='val dim wnd';}
+
+  const wp=document.getElementById('windPanel'),wt=document.getElementById('wpTWD'),ws=document.getElementById('wpStatus');
+  if(S.twd!==null){
+    wt.textContent=Math.round(S.twd)+'°';wt.className='wp-twd-big';
+    ws.textContent=S.twdSource==='headtowind'?'Set via head-to-wind':'Set manually';
+    wp.classList.add('active');
+  }else{
+    wt.textContent='---°';wt.className='wp-twd-big dim';
+    ws.textContent='Not set — COG fallback';wp.classList.remove('active');
   }
 
-  // near line
   const nl=document.getElementById('nearline');
   if(r<120&&lineReady()&&S.gpsReady){
     nl.classList.add('show');
-    document.getElementById('nlPin').textContent  = S.distPin.toFixed(2)+'nm';
-    document.getElementById('nlRC').textContent   = S.distRC.toFixed(2)+'nm';
-    document.getElementById('nlLine').textContent = S.distLine.toFixed(3)+'nm';
+    document.getElementById('nlPin').textContent =S.distPin.toFixed(2)+'nm';
+    document.getElementById('nlRC').textContent  =S.distRC.toFixed(2)+'nm';
+    document.getElementById('nlLine').textContent=S.distLine.toFixed(3)+'nm';
     const nf=document.getElementById('nlFav');
     nf.textContent=S.favored||'--';
     nf.className='nl-val'+(S.favored==='PIN'?' pin':S.favored==='RC'?' rc':'');
-  } else nl.classList.remove('show');
+    const nb=document.getElementById('nlBias');
+    if(S.favorBias>0){nb.textContent='+'+S.favorBias+'°';nb.className='nl-val bias';}
+    else{nb.textContent='--';nb.className='nl-val bias';}
+  }else nl.classList.remove('show');
 
-  // mark distances
-  if(S.pinSet&&S.gpsReady) document.getElementById('pinDist').textContent=S.distPin.toFixed(2)+'nm';
-  if(S.rcSet&&S.gpsReady)  document.getElementById('rcDist').textContent=S.distRC.toFixed(2)+'nm';
+  if(S.pinSet&&S.gpsReady)document.getElementById('pinDist').textContent=S.distPin.toFixed(2)+'nm';
+  if(S.rcSet &&S.gpsReady)document.getElementById('rcDist').textContent =S.distRC.toFixed(2)+'nm';
 }
 
+// ── Wind ──────────────────────────────────────────────────
+// Point bow directly into wind, press button — COG = wind direction
+function doHeadToWind(){
+  if(!S.gpsReady){toast('No GPS fix');return;}
+  S.twd=S.cog; S.twdSource='headtowind';
+  beep('short'); toast('TWD set '+Math.round(S.twd)+'° — wind from '+Math.round(S.twd)+'°');
+  tick();
+}
+function doManualWind(){
+  const v=parseInt(document.getElementById('windIn').value);
+  if(isNaN(v)||v<0||v>359){toast('Enter 0 – 359°');return;}
+  S.twd=v; S.twdSource='manual';
+  document.getElementById('windIn').value='';
+  document.getElementById('windIn').blur();
+  beep('short'); toast('TWD set to '+v+'° manually'); tick();
+}
+function doClearWind(){
+  S.twd=null; S.twdSource='';
+  toast('Wind cleared — using COG fallback'); tick();
+}
+
+// ── Timer / marks ─────────────────────────────────────────
 function doSync(){
-  audio(); S.startMs=Date.now(); S.running=true; S.lastBeepSec=-1;
+  audio();S.startMs=Date.now();S.running=true;S.lastBeepSec=-1;
   document.getElementById('cdPanel').classList.add('running');
-  beep('short'); toast('Synced — '+S.mode+':00');
-  if(S.ticker) clearInterval(S.ticker);
-  S.ticker=setInterval(tick,1000); tick();
+  beep('short');toast('Synced — '+S.mode+':00');
+  if(S.ticker)clearInterval(S.ticker);
+  S.ticker=setInterval(tick,1000);tick();
 }
 function doResync(){
   if(!S.running){toast('Timer not running');return;}
   const el=Math.floor((Date.now()-S.startMs)/1000);
   const snap=(Math.floor(el/60)+1)*60;
-  S.startMs=Date.now()-snap*1000; S.lastBeepSec=-1;
-  beep('short2'); toast('Resynced → '+fmt(Math.max(0,S.mode*60-snap))); tick();
+  S.startMs=Date.now()-snap*1000;S.lastBeepSec=-1;
+  beep('short2');toast('Resynced → '+fmt(Math.max(0,S.mode*60-snap)));tick();
 }
 function doMode(){
-  S.mode=S.mode===5?3:5; S.running=false; S.startMs=0; S.lastBeepSec=-1;
-  if(S.ticker) clearInterval(S.ticker);
+  S.mode=S.mode===5?3:5;S.running=false;S.startMs=0;S.lastBeepSec=-1;
+  if(S.ticker)clearInterval(S.ticker);
   document.getElementById('cdPanel').classList.remove('running');
   document.getElementById('modePill').textContent=S.mode+' MIN';
   document.getElementById('modeBtn').textContent=S.mode+' Min';
-  toast(S.mode+'-minute sequence'); tick();
+  toast(S.mode+'-minute sequence');tick();
 }
 function doMarkPin(){
   if(!S.gpsReady){toast('No GPS fix');return;}
-  S.pinLat=S.lat; S.pinLon=S.lon; S.pinSet=true;
+  S.pinLat=S.lat;S.pinLon=S.lon;S.pinSet=true;
   document.getElementById('pinMark').classList.add('set');
   document.getElementById('pinDist').textContent='...';
-  beep('short'); toast(S.rcSet?'PIN updated — Line ready':'PIN set — Sail to RC boat');
-  calcLine(); tick();
+  beep('short');toast(S.rcSet?'PIN updated — Line ready':'PIN set — Sail to RC boat');
+  calcLine();tick();
 }
 function doMarkRC(){
   if(!S.gpsReady){toast('No GPS fix');return;}
-  S.rcLat=S.lat; S.rcLon=S.lon; S.rcSet=true;
+  S.rcLat=S.lat;S.rcLon=S.lon;S.rcSet=true;
   document.getElementById('rcMark').classList.add('set');
   document.getElementById('rcDist').textContent='...';
-  beep('short'); toast(S.pinSet?'RC updated — Line ready':'RC set — Sail to PIN end');
-  calcLine(); tick();
+  beep('short');toast(S.pinSet?'RC updated — Line ready':'RC set — Sail to PIN end');
+  calcLine();tick();
 }
 function doClearLine(){
-  S.pinSet=false; S.rcSet=false; S.distPin=0; S.distRC=0; S.distLine=0; S.burnTime=0; S.favored='';
-  document.getElementById('pinMark').classList.remove('set'); document.getElementById('pinDist').textContent='Not set';
-  document.getElementById('rcMark').classList.remove('set');  document.getElementById('rcDist').textContent='Not set';
-  beep('short2'); toast('Line cleared'); tick();
+  S.pinSet=false;S.rcSet=false;S.distPin=0;S.distRC=0;S.distLine=0;S.burnTime=0;S.favored='';S.favorBias=0;
+  document.getElementById('pinMark').classList.remove('set');document.getElementById('pinDist').textContent='Not set';
+  document.getElementById('rcMark').classList.remove('set'); document.getElementById('rcDist').textContent='Not set';
+  beep('short2');toast('Line cleared');tick();
 }
 
-function toast(msg){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
-}
-
-async function keepAwake(){
-  try{ if('wakeLock' in navigator) await navigator.wakeLock.request('screen'); }catch(e){}
-}
-document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') keepAwake(); });
-
-keepAwake(); startGPS(); tick();
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+async function keepAwake(){try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen');}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')keepAwake();});
+keepAwake();startGPS();tick();
 </script>
 </body>
 </html>
