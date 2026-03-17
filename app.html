@@ -182,13 +182,13 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   <div class="data-row">
     <div class="dc hi">  <div class="lbl">Burn</div><div class="val dim" id="dBurn">----</div></div>
     <div class="dc">     <div class="lbl">SOG</div> <div class="val dim" id="dSOG">--.-</div></div>
-    <div class="dc">     <div class="lbl">COG</div> <div class="val dim" id="dCOG">---</div></div>
-    <div class="dc wind"><div class="lbl">TWD</div> <div class="val dim wnd" id="dTWD">---</div></div>
     <div class="dc spd">
-      <div class="lbl">Spd/Line</div>
+      <div class="lbl">Target</div>
       <div class="spd-main dim" id="dSpdMain">--.-</div>
       <div class="spd-delta dim" id="dSpdDelta">-- kt</div>
     </div>
+    <div class="dc">     <div class="lbl">COG</div> <div class="val dim" id="dCOG">---</div></div>
+    <div class="dc wind"><div class="lbl">TWD</div> <div class="val dim wnd" id="dTWD">---</div></div>
   </div>
 
   <!-- WIND PANEL -->
@@ -360,10 +360,14 @@ function calcLine(){
 
   // Speed to line: knots needed to reach the line exactly at the gun
   // Formula: distToLine (nm) / timeRemaining (hours) = speed (knots)
+  // At r=0 we keep the last calculated value rather than dividing by zero
   const r=rem();
-  if(r>0 && S.distLine>0.001){
+  if(r>2 && S.distLine>0.001){
     S.spdNeeded = S.distLine / (r / 3600);  // knots
     S.spdDelta  = S.sog - S.spdNeeded;      // positive = too fast, negative = too slow
+  } else if(r<=2){
+    // Inside last 2 seconds — hold the last value, avoid divide-by-zero
+    // spdNeeded and spdDelta stay at their last values
   } else {
     S.spdNeeded = 0;
     S.spdDelta  = 0;
@@ -406,21 +410,23 @@ function tick(){
   else{tw.textContent='---';tw.className='val dim wnd';}
 
   // Speed to line cell — target speed + delta
+  // Show whenever line is set and GPS ready, even at r=0
   const sm=document.getElementById('dSpdMain'), sd=document.getElementById('dSpdDelta');
-  if(lineReady()&&S.gpsReady&&S.distLine>0.001&&rem()>0){
-    sm.textContent=S.spdNeeded.toFixed(1)+'kt';
+  if(lineReady()&&S.gpsReady&&S.distLine>0.001){
+    // At r=0 keep showing last calculated speed rather than going blank
+    const spd = S.spdNeeded > 0 ? S.spdNeeded : S.sog;
+    sm.textContent=spd.toFixed(1)+'kt';
     sm.className='spd-main';
     const delta=S.spdDelta, absDelta=Math.abs(delta);
     const dSign=delta>0?'+':'-';
     const dTxt=dSign+absDelta.toFixed(1)+'kt';
-    if(absDelta<0.3){
-      // On target — within 0.3kt
+    if(r===0){
+      sd.textContent='racing';sd.className='spd-delta ontgt';
+    } else if(absDelta<0.3){
       sd.textContent='on target';sd.className='spd-delta ontgt';
     } else if(delta>0){
-      // Going too fast — ease off
       sd.textContent=dTxt+' ease';sd.className='spd-delta fast';
     } else {
-      // Going too slow — trim on
       sd.textContent=dTxt+' trim';sd.className='spd-delta slow';
     }
   } else {
