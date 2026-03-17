@@ -227,17 +227,19 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
   <div class="hero-screen">
     <div class="ms-label">Countdown</div>
     <div class="ms-time" id="demoTime">2:14</div>
-    <div class="ms-row">
+    <div class="ms-row" style="grid-template-columns:repeat(5,1fr)">
       <div class="ms-cell"><div class="ms-cl">Burn</div><div class="ms-cv go" id="demoBurn">0:38</div></div>
       <div class="ms-cell"><div class="ms-cl">SOG</div><div class="ms-cv">6.1kt</div></div>
+      <div class="ms-cell"><div class="ms-cl">Target</div><div class="ms-cv" style="color:var(--gold)">5.8kt</div></div>
       <div class="ms-cell"><div class="ms-cl">COG</div><div class="ms-cv">053°</div></div>
-      <div class="ms-cell"><div class="ms-cl">Mode</div><div class="ms-cv">5min</div></div>
+      <div class="ms-cell"><div class="ms-cl">TWD</div><div class="ms-cv" style="color:#c084fc">042°</div></div>
     </div>
-    <div class="ms-near">
-      <div class="ms-cell"><div class="ms-cl">PIN</div><div class="ms-cv" style="font-size:16px;color:var(--sky)" id="demoPin">0.14nm</div></div>
-      <div class="ms-cell"><div class="ms-cl">RC</div><div class="ms-cv" style="font-size:16px;color:var(--sky)" id="demoRC">0.29nm</div></div>
-      <div class="ms-cell"><div class="ms-cl">LINE</div><div class="ms-cv" style="font-size:16px;color:var(--sky)" id="demoLine">0.042nm</div></div>
-      <div class="ms-cell"><div class="ms-cl">FAV</div><div class="ms-cv" style="font-size:16px;color:var(--coral)">PIN</div></div>
+    <div class="ms-near" style="grid-template-columns:repeat(5,1fr)">
+      <div class="ms-cell"><div class="ms-cl">PIN</div><div class="ms-cv" style="font-size:14px;color:var(--sky)" id="demoPin">0.14nm</div></div>
+      <div class="ms-cell"><div class="ms-cl">RC</div><div class="ms-cv" style="font-size:14px;color:var(--sky)" id="demoRC">0.29nm</div></div>
+      <div class="ms-cell"><div class="ms-cl">LINE</div><div class="ms-cv" style="font-size:14px;color:var(--sky)" id="demoLine">0.042nm</div></div>
+      <div class="ms-cell"><div class="ms-cl">FAV</div><div class="ms-cv" style="font-size:14px;color:var(--coral)">PIN</div></div>
+      <div class="ms-cell"><div class="ms-cl">BIAS</div><div class="ms-cv" style="font-size:14px;color:#c084fc">+7°</div></div>
     </div>
     <div class="ms-dots">
       <div class="ms-dot f"></div><div class="ms-dot f"></div>
@@ -257,32 +259,32 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
     <div class="feat">
       <div class="feat-num">01</div>
       <div class="feat-title">GPS Start Line Geometry</div>
-      <div class="feat-desc">Mark the PIN and RC boat ends independently. Real-time distance to each end, perpendicular distance to the line, and favored end calculation — all from your tablet's built-in GPS.</div>
+      <div class="feat-desc">Mark the PIN and RC boat ends independently — in either order. Real-time distance to each end, perpendicular distance to the line, and favored end calculation — all from your device's built-in GPS.</div>
     </div>
     <div class="feat">
       <div class="feat-num">02</div>
       <div class="feat-title">Burn Time Calculator</div>
-      <div class="feat-desc">Always-visible burn time based on your current speed and distance to the line. Counts down to zero at the gun, not before. Flips to GO when it's time to head for the line.</div>
+      <div class="feat-desc">Always-visible burn time based on your current speed and distance to the line. Counts down to zero at the gun. Flips to GO when it's time to head for the line at full speed.</div>
     </div>
     <div class="feat">
       <div class="feat-num">03</div>
-      <div class="feat-title">Precise Beep Schedule</div>
-      <div class="feat-desc">Audible signals at every minute mark, the 30-second mark, every second inside 10 seconds, and a distinct tone for the final 5 seconds. Never miss a gun signal.</div>
+      <div class="feat-title">True Wind Direction</div>
+      <div class="feat-desc">Point the bow into the wind and tap Head to Wind — LineUp records the true wind direction instantly. Or enter it manually. Used for accurate favored end calculation and line bias in degrees.</div>
     </div>
     <div class="feat">
       <div class="feat-num">04</div>
-      <div class="feat-title">Smart RESYNC</div>
-      <div class="feat-desc">Missed the gun? One tap snaps the timer down to the next lower whole minute — you can never accidentally put yourself ahead of the race committee.</div>
+      <div class="feat-title">Speed to Line</div>
+      <div class="feat-desc">Real-time target speed showing exactly how fast to sail to reach the line at the gun. Color-coded delta tells you to ease off or trim on. Always visible alongside your current SOG.</div>
     </div>
     <div class="feat">
       <div class="feat-num">05</div>
-      <div class="feat-title">Works on Anything</div>
-      <div class="feat-desc">Runs in any modern browser. Android, iPad, iPhone, laptop. Add to your home screen for a full-screen native app experience. No App Store. No install. No account.</div>
+      <div class="feat-title">Precise Beep Schedule</div>
+      <div class="feat-desc">Audible signals at every minute mark, the 30-second mark, every second inside 10 seconds, and a distinct higher tone for the final 5 seconds. Never miss a gun signal.</div>
     </div>
     <div class="feat">
       <div class="feat-num">06</div>
-      <div class="feat-title">Marine-Grade Display</div>
-      <div class="feat-desc">Dark high-contrast interface designed for sunlight readability. Large Bebas Neue numerals visible at a glance from the helm. Screen-wake lock keeps it on during the race.</div>
+      <div class="feat-title">Works on Anything</div>
+      <div class="feat-desc">Runs in any modern browser. Android, iPad, iPhone, laptop. No App Store. No install. No account. Add to your home screen for a full-screen experience. Daylight-optimised light theme.</div>
     </div>
   </div>
 </div>
@@ -296,13 +298,15 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>
-      <div class="step-title">Open LineUp in Chrome</div>
-      <div class="step-desc">Tap "Add to Home Screen" to install as a full-screen app. Allow location access when prompted.</div>
+      <div class="step-title">Open LineUp in Chrome or Safari</div>
+      <div class="step-desc">Allow location when prompted. GPS locks in 30–60 seconds on open water. No install needed.</div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-title">Set the start line</div>
-      <div class="step-desc">Sail to the PIN end, tap MARK PIN. Sail to the RC boat, tap MARK RC. Line geometry activates immediately.</div>
+      <div class="step-body">
+      <div class="step-title">Set wind &amp; start line</div>
+      <div class="step-desc">Head into the wind, tap Head to Wind. Then sail to PIN end, tap Mark PIN. Sail to RC boat, tap Mark RC.</div>
+      </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
@@ -311,8 +315,8 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
     </div>
     <div class="step">
       <div class="step-num">4</div>
-      <div class="step-title">Hit the line</div>
-      <div class="step-desc">Watch burn time count to zero, listen for the beeps, and aim for the favored end. Perfect start, every time.</div>
+      <div class="step-title">Hit the line perfectly</div>
+      <div class="step-desc">Watch burn time count to GO, match your speed to the Target, and aim for the favored end.</div>
     </div>
   </div>
   <div style="margin-top:48px;">
@@ -335,11 +339,14 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
     </div>
     <div class="ct-row"><div class="ct-cell feature">GPS distance to line</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
     <div class="ct-row"><div class="ct-cell feature">Burn time calculation</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
-    <div class="ct-row"><div class="ct-cell feature">Favored end analysis</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Speed to line + delta</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell no">✗</div></div>
+    <div class="ct-row"><div class="ct-cell feature">True wind direction</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Favored end + bias°</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
     <div class="ct-row"><div class="ct-cell feature">PIN + RC waypoints</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell yes">✓</div></div>
     <div class="ct-row"><div class="ct-cell feature">Audible countdown signals</div><div class="ct-cell yes hl">✓</div><div class="ct-cell yes">✓</div><div class="ct-cell yes">✓</div></div>
     <div class="ct-row"><div class="ct-cell feature">5 + 3 min sequences</div><div class="ct-cell yes hl">✓</div><div class="ct-cell yes">✓</div><div class="ct-cell yes">✓</div></div>
     <div class="ct-row"><div class="ct-cell feature">Works on your existing device</div><div class="ct-cell yes hl">✓</div><div class="ct-cell no">✗</div><div class="ct-cell no">✗</div></div>
+    <div class="ct-row"><div class="ct-cell feature">Sunlight-readable display</div><div class="ct-cell yes hl">✓</div><div class="ct-cell yes">✓</div><div class="ct-cell yes">✓</div></div>
     <div class="ct-row"><div class="ct-cell feature">Cost</div><div class="ct-cell hl" style="color:var(--gold);font-weight:500">Free</div><div class="ct-cell">$30–80</div><div class="ct-cell">$499</div></div>
   </div>
 </div>
@@ -365,7 +372,7 @@ footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex;
   </div>
   <div class="donate-card">
     <div class="section-label" style="margin-bottom:12px">Stay in the loop</div>
-    <p style="font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6">Get notified when new features ship — wind integration, native app, hardware kit, and more.</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6">Get notified when new features ship — native app, hardware kit, and more. Be first to know when LineUp hits the Play Store.</p>
     <div class="email-form" id="emailForm">
       <input type="text" placeholder="Your name" id="emailName">
       <input type="email" placeholder="Email address" id="emailAddr">
