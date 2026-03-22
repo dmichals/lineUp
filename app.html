@@ -147,6 +147,38 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 
 @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes flashPop { 0%{opacity:0.35} 100%{opacity:0} }
+
+/* ── PRO GATE ── */
+.trial-banner { background: #fff8e8; border: 2px solid #e8c840; border-radius: 10px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.trial-banner.urgent { background: #fdecea; border-color: var(--coral); }
+.trial-txt { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #7a5800; font-weight: 600; }
+.trial-banner.urgent .trial-txt { color: var(--coral); }
+.trial-link { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); font-weight: 600; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; }
+
+.pro-overlay { position: fixed; inset: 0; background: rgba(240,242,240,0.97); z-index: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+.pro-overlay.hidden { display: none; }
+.pro-lock { font-size: 40px; margin-bottom: 12px; }
+.pro-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--text); margin-bottom: 8px; }
+.pro-title span { color: var(--accent); }
+.pro-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; max-width: 320px; }
+.pro-features { background: var(--panel); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; text-align: left; width: 100%; max-width: 320px; }
+.pro-feat { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text); padding: 3px 0; font-weight: 600; }
+.pro-feat::before { content: '✓ '; color: var(--go); }
+.pro-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); margin-bottom: 16px; }
+.pro-btn { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 14px 32px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; width: 100%; max-width: 320px; transition: background 0.15s; }
+.pro-btn:active { background: #1248a0; }
+.pro-already { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); cursor: pointer; text-decoration: underline; background: none; border: none; padding: 0; }
+
+.unlock-panel { background: var(--panel); border: 2px solid var(--border); border-radius: 12px; padding: 20px; width: 100%; max-width: 340px; margin-top: 8px; }
+.unlock-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--text); margin-bottom: 4px; }
+.unlock-desc { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+.unlock-input { width: 100%; background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 8px; font-family: 'Share Tech Mono', monospace; font-size: 14px; outline: none; margin-bottom: 8px; transition: border-color 0.2s; }
+.unlock-input:focus { border-color: var(--accent); }
+.unlock-btn { width: 100%; background: var(--go); color: #fff; border: none; border-radius: 8px; padding: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; cursor: pointer; margin-bottom: 8px; transition: background 0.15s; }
+.unlock-btn:active { background: #157a32; }
+.unlock-back { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); cursor: pointer; text-decoration: underline; background: none; border: none; padding: 0; display: block; margin: 0 auto; }
+.unlock-err { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--coral); margin-bottom: 8px; display: none; font-weight: 600; }
+.unlock-ok  { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--go); margin-bottom: 8px; display: none; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -161,6 +193,42 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
       </div>
       <div class="mode-pill" id="modePill" onclick="doMode()">5 MIN</div>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsh_djW-6VSF1FInK6m-Xj6KnpwWy-ht-1wr9fCnYJRjirNw/viewform?usp=header" target="_blank" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#1a5fa8;background:#e0eaf8;border:1.5px solid #a0c0e8;padding:5px 10px;border-radius:20px;text-decoration:none;font-weight:600;white-space:nowrap;">Feedback</a>
+    </div>
+  </div>
+
+  <!-- TRIAL BANNER — shown on uses 8-9 -->
+  <div class="trial-banner" id="trialBanner" style="display:none">
+    <span class="trial-txt" id="trialTxt">2 free uses remaining</span>
+    <button class="trial-link" onclick="showProOverlay()">Unlock Pro →</button>
+  </div>
+
+  <!-- PRO OVERLAY — shown when trial expired -->
+  <div class="pro-overlay hidden" id="proOverlay">
+    <div class="pro-lock">⚓</div>
+    <div class="pro-title"><span>Line</span>Up Pro</div>
+    <p class="pro-desc">Your free trial has ended. Unlock Pro to keep using GPS start line features.</p>
+    <div class="pro-features">
+      <div class="pro-feat">GPS start line geometry</div>
+      <div class="pro-feat">Burn time calculator</div>
+      <div class="pro-feat">Speed to line + target</div>
+      <div class="pro-feat">True wind direction</div>
+      <div class="pro-feat">Favored end + bias</div>
+      <div class="pro-feat">Near-line panel</div>
+    </div>
+    <div class="pro-price">One-time $14.99</div>
+    <a href="https://www.paypal.me/dmichals/14.99" target="_blank" class="pro-btn" style="display:block;text-decoration:none;text-align:center;" onclick="showUnlockPanel()">Buy via PayPal →</a>
+    <button class="pro-already" onclick="showUnlockPanel()">Already paid? Enter unlock code</button>
+
+    <!-- UNLOCK PANEL — enter email + code -->
+    <div class="unlock-panel" id="unlockPanel" style="display:none">
+      <div class="unlock-title">Unlock LineUp Pro</div>
+      <p class="unlock-desc">Enter the email you used to pay and the unlock code from your receipt email.</p>
+      <div class="unlock-err" id="unlockErr">Invalid code — check your email and try again</div>
+      <div class="unlock-ok"  id="unlockOk">Unlocked! Welcome to LineUp Pro.</div>
+      <input class="unlock-input" id="unlockEmail" type="email" placeholder="Your email address">
+      <input class="unlock-input" id="unlockCode"  type="text"  placeholder="Unlock code (e.g. LU-A3F2-9B1C)" style="text-transform:uppercase;letter-spacing:2px">
+      <button class="unlock-btn" onclick="doUnlock()">Unlock Now</button>
+      <button class="unlock-back" onclick="hideUnlockPanel()">← Back</button>
     </div>
   </div>
 
@@ -258,6 +326,116 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 <div class="toast" id="toast"></div>
 
 <script>
+// ── LICENSE SYSTEM ────────────────────────────────────────
+// Uses localStorage to track trial uses and pro status
+// Unlock codes are generated from email using a simple hash
+// To generate a code for a paying customer, use the admin
+// page (admin.html) — never share the hash secret publicly
+
+const PRO_KEY      = 'lineup_pro';        // stored unlock code
+const USES_KEY     = 'lineup_uses';       // open count
+const EMAIL_KEY    = 'lineup_email';      // email used to unlock
+const TRIAL_LIMIT  = 10;                  // free uses before gate
+const WARN_AT      = 8;                   // start warning at this use
+// Hash secret — change this to something only you know
+// Must match what admin.html uses to generate codes
+const HASH_SECRET  = 'lineup2026sail';
+
+// Pro features gate — returns true if user can use pro features
+function isPro() {
+  return !!localStorage.getItem(PRO_KEY);
+}
+
+// Generate unlock code from email + secret
+// Format: LU-XXXX-XXXX (8 hex chars split in two)
+async function generateCode(email) {
+  const str  = email.trim().toLowerCase() + HASH_SECRET;
+  const buf  = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  const hex  = Array.from(new Uint8Array(hash))
+                 .map(b => b.toString(16).padStart(2,'0')).join('');
+  return 'LU-' + hex.slice(0,4).toUpperCase() + '-' + hex.slice(4,8).toUpperCase();
+}
+
+// Increment use count and check gate on each app open
+function checkTrial() {
+  if (isPro()) return;
+  let uses = parseInt(localStorage.getItem(USES_KEY) || '0') + 1;
+  localStorage.setItem(USES_KEY, uses);
+
+  if (uses >= TRIAL_LIMIT) {
+    // Lock — show pro overlay
+    document.getElementById('proOverlay').classList.remove('hidden');
+  } else if (uses >= WARN_AT) {
+    // Warn — show banner
+    const remaining = TRIAL_LIMIT - uses;
+    const banner    = document.getElementById('trialBanner');
+    const txt       = document.getElementById('trialTxt');
+    banner.style.display = 'flex';
+    txt.textContent = remaining + ' free use' + (remaining===1?'':'s') + ' remaining';
+    if (remaining <= 1) banner.classList.add('urgent');
+  }
+}
+
+// Block pro features if not unlocked — call before using them
+function requirePro(action) {
+  if (isPro()) { action(); return; }
+  const uses = parseInt(localStorage.getItem(USES_KEY) || '0');
+  if (uses >= TRIAL_LIMIT) {
+    showProOverlay();
+  } else {
+    action();
+  }
+}
+
+function showProOverlay() {
+  document.getElementById('proOverlay').classList.remove('hidden');
+}
+function hideProOverlay() {
+  document.getElementById('proOverlay').classList.add('hidden');
+  document.getElementById('unlockPanel').style.display = 'none';
+}
+function showUnlockPanel() {
+  document.getElementById('unlockPanel').style.display = 'block';
+}
+function hideUnlockPanel() {
+  document.getElementById('unlockPanel').style.display = 'none';
+}
+
+async function doUnlock() {
+  const email = document.getElementById('unlockEmail').value.trim().toLowerCase();
+  const code  = document.getElementById('unlockCode').value.trim().toUpperCase();
+  const err   = document.getElementById('unlockErr');
+  const ok    = document.getElementById('unlockOk');
+  err.style.display = 'none';
+  ok.style.display  = 'none';
+
+  if (!email || !email.includes('@')) {
+    err.textContent = 'Please enter a valid email address';
+    err.style.display = 'block'; return;
+  }
+  if (!code.startsWith('LU-')) {
+    err.textContent = 'Invalid code format — should start with LU-';
+    err.style.display = 'block'; return;
+  }
+
+  const expected = await generateCode(email);
+  if (code === expected) {
+    localStorage.setItem(PRO_KEY,   code);
+    localStorage.setItem(EMAIL_KEY, email);
+    ok.style.display = 'block';
+    setTimeout(() => {
+      hideProOverlay();
+      document.getElementById('trialBanner').style.display = 'none';
+      toast('LineUp Pro unlocked — welcome aboard!');
+    }, 1800);
+  } else {
+    err.textContent = 'Invalid code — check your email and try again';
+    err.style.display = 'block';
+  }
+}
+
+// ── MAIN APP STATE ────────────────────────────────────────
 const S = {
   running:false, startMs:0, mode:5,
   pinSet:false, rcSet:false, pinLat:0, pinLon:0, rcLat:0, rcLon:0,
@@ -464,24 +642,27 @@ function tick(){
 }
 
 // ── Wind ──────────────────────────────────────────────────
-// Point bow directly into wind, press button — COG = wind direction
 function doHeadToWind(){
-  if(!S.gpsReady){toast('No GPS fix');return;}
-  S.twd=S.cog; S.twdSource='headtowind';
-  beep('short'); toast('TWD set '+Math.round(S.twd)+'° — wind from '+Math.round(S.twd)+'°');
-  tick();
+  requirePro(()=>{
+    if(!S.gpsReady){toast('No GPS fix');return;}
+    S.twd=S.cog;S.twdSource='headtowind';
+    beep('short');toast('TWD set '+Math.round(S.twd)+'° — wind from '+Math.round(S.twd)+'°');
+    tick();
+  });
 }
 function doManualWind(){
-  const v=parseInt(document.getElementById('windIn').value);
-  if(isNaN(v)||v<0||v>359){toast('Enter 0 – 359°');return;}
-  S.twd=v; S.twdSource='manual';
-  document.getElementById('windIn').value='';
-  document.getElementById('windIn').blur();
-  beep('short'); toast('TWD set to '+v+'° manually'); tick();
+  requirePro(()=>{
+    const v=parseInt(document.getElementById('windIn').value);
+    if(isNaN(v)||v<0||v>359){toast('Enter 0 – 359°');return;}
+    S.twd=v;S.twdSource='manual';
+    document.getElementById('windIn').value='';
+    document.getElementById('windIn').blur();
+    beep('short');toast('TWD set to '+v+'° manually');tick();
+  });
 }
 function doClearWind(){
-  S.twd=null; S.twdSource='';
-  toast('Wind cleared — using COG fallback'); tick();
+  S.twd=null;S.twdSource='';
+  toast('Wind cleared — using COG fallback');tick();
 }
 
 // ── Timer / marks ─────────────────────────────────────────
@@ -508,20 +689,24 @@ function doMode(){
   toast(S.mode+'-minute sequence');tick();
 }
 function doMarkPin(){
-  if(!S.gpsReady){toast('No GPS fix');return;}
-  S.pinLat=S.lat;S.pinLon=S.lon;S.pinSet=true;
-  document.getElementById('pinMark').classList.add('set');
-  document.getElementById('pinDist').textContent='...';
-  beep('short');toast(S.rcSet?'PIN updated — Line ready':'PIN set — Sail to RC boat');
-  calcLine();tick();
+  requirePro(()=>{
+    if(!S.gpsReady){toast('No GPS fix');return;}
+    S.pinLat=S.lat;S.pinLon=S.lon;S.pinSet=true;
+    document.getElementById('pinMark').classList.add('set');
+    document.getElementById('pinDist').textContent='...';
+    beep('short');toast(S.rcSet?'PIN updated — Line ready':'PIN set — Sail to RC boat');
+    calcLine();tick();
+  });
 }
 function doMarkRC(){
-  if(!S.gpsReady){toast('No GPS fix');return;}
-  S.rcLat=S.lat;S.rcLon=S.lon;S.rcSet=true;
-  document.getElementById('rcMark').classList.add('set');
-  document.getElementById('rcDist').textContent='...';
-  beep('short');toast(S.pinSet?'RC updated — Line ready':'RC set — Sail to PIN end');
-  calcLine();tick();
+  requirePro(()=>{
+    if(!S.gpsReady){toast('No GPS fix');return;}
+    S.rcLat=S.lat;S.rcLon=S.lon;S.rcSet=true;
+    document.getElementById('rcMark').classList.add('set');
+    document.getElementById('rcDist').textContent='...';
+    beep('short');toast(S.pinSet?'RC updated — Line ready':'RC set — Sail to PIN end');
+    calcLine();tick();
+  });
 }
 function doClearLine(){
   S.pinSet=false;S.rcSet=false;S.distPin=0;S.distRC=0;S.distLine=0;S.burnTime=0;S.favored='';S.favorBias=0;
@@ -533,7 +718,7 @@ function doClearLine(){
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
 async function keepAwake(){try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen');}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')keepAwake();});
-keepAwake();startGPS();tick();
+keepAwake();startGPS();checkTrial();tick();
 </script>
 </body>
 </html>
