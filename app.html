@@ -574,12 +574,17 @@ function tick(){
   const tot=S.mode*60,el=tot-r;let f=0;
   if(el>=0)f=1;if(el>=60)f=2;if(el>=(S.mode-1)*60)f=3;if(r===0)f=4;
   for(let i=0;i<4;i++){const d=document.getElementById('sd'+i);d.className='sdot'+(i<f?(r===0?' gun':' on'):'');}
-
   const bv=document.getElementById('dBurn');
   if(lineReady()&&S.gpsReady){
-    if(S.burnTime>0){bv.textContent=fmt(S.burnTime);bv.className='val';}
-    else if(S.running){bv.textContent='GO!';bv.className='val go';}
-    else{bv.textContent='0:00';bv.className='val dim';}
+    if(S.burnTime>0){
+      bv.textContent=fmt(S.burnTime);bv.className='val';
+    } else if(S.running){
+      const over=Math.round(-S.burnTime);
+      bv.textContent='-'+fmt(over);
+      bv.className='val'+(over>=30?' urgent':' warn');
+    } else {
+      bv.textContent='0:00';bv.className='val dim';
+    }
   }else{bv.textContent='----';bv.className='val dim';}
 
   const sv=document.getElementById('dSOG'),cv=document.getElementById('dCOG'),tw=document.getElementById('dTWD');
